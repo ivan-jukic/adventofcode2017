@@ -68,9 +68,6 @@ calculateSteps =
 calculateFirstLargerNum : Int
 calculateFirstLargerNum =
     let
-        circularList =
-            [ (1, (0, 0)) ]
-
         generateList n current list =
             let
                 (x, y) =
