@@ -1,5 +1,7 @@
 import Html exposing (..)
+import PuzzleView exposing (puzzleView)
 import Regex exposing (regex, HowMany(All))
+
 
 main: Program Never Model Msg
 main = 
@@ -31,10 +33,10 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ div [] [ text ("Part 1 checksum is: " ++ (toString calculateCheckSumPart1)) ]
-        , div [] [ text ("Part 2 checksum is: " ++ (toString calculateCheckSumPart2)) ]
-        ]
+    puzzleView
+        "02 Corruption Checksum"
+        ( "Solution for the first part: ", toString calculateCheckSumPart1 )
+        ( "Solution for the second part: ", toString calculateCheckSumPart2 )
 
 
 calculateCheckSumPart1 : Int

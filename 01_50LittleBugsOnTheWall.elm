@@ -1,4 +1,5 @@
 import Html exposing (..)
+import PuzzleView exposing (puzzleView)
 
 
 main: Program Never Model Msg
@@ -31,10 +32,10 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ div [] [ text ("Part 1 sum is: " ++ (toString calculateSumPart1)) ]
-        , div [] [ text ("Part 2 sum is: " ++ (toString calculateSumPart2)) ]
-        ]
+    puzzleView
+        "01 Inverse Captcha"
+        ( "Captcha sum for first part: ", toString calculateSumPart1 )
+        ( "Captcha sum for second part: ", toString calculateSumPart2)
 
 
 calculateSumPart1 : Int
