@@ -13,4 +13,4 @@ I hope to see some improvement in the way how I use the language, and how well I
 Interestingly had some minor issues with the input. Had to regex replace all the tabs in the string with spaces to get it to compile.
 - ### Day 3
 Little bit of mathematics behind this puzzle [https://en.wikipedia.org/wiki/Ulam_spiral](https://en.wikipedia.org/wiki/Ulam_spiral).
-The fact that the bottom right corners are powere of odd numbers can be used to solve the first part of the puzzle.
+The fact that the bottom right corners are powers of odd numbers can be used to solve the first part of the puzzle.
