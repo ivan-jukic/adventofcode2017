@@ -9,8 +9,11 @@ I hope to see some improvement in the way how I use the language, and how well I
 ---
 
 - ### Day 01
+And we have a kick off to another 25 days filled with moments of frustration and despair, but also satisfaction. Hopefully I will have enough time to complete the whole challenge this year.
 - ### Day 02
 Interestingly had some minor issues with the input. Had to regex replace all the tabs in the string with spaces to get it to compile.
 - ### Day 3
 Little bit of mathematics behind this puzzle [https://en.wikipedia.org/wiki/Ulam_spiral](https://en.wikipedia.org/wiki/Ulam_spiral).
 The fact that the bottom right corners are powers of odd numbers can be used to solve the first part of the puzzle.
+- ### Day 4
+Simple but interesting puzzle. Second part runs quick if we check the string lengths first, before checking if it's an anagram.

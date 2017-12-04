@@ -9,6 +9,7 @@ links =
     [ "01_50LittleBugsOnTheWall.elm"
     , "02_FixingSpreadsheets.elm"
     , "03_DizzySpiral.elm"
+    , "04_ValidatingPassphrases.elm"
     ]
 
 
