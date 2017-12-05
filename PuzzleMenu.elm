@@ -10,6 +10,7 @@ links =
     , "02_FixingSpreadsheets.elm"
     , "03_DizzySpiral.elm"
     , "04_ValidatingPassphrases.elm"
+    , "05_EscapingInstructionHell.elm"
     ]
 
 

@@ -1,5 +1,5 @@
 import Html exposing (..)
-import PuzzleView exposing (puzzleView)
+import PuzzleView exposing (puzzleView, partData)
 
 
 main: Program Never Model Msg
@@ -34,8 +34,17 @@ view : Model -> Html Msg
 view model =
     puzzleView
         "01 Inverse Captcha"
-        ( "Captcha sum for first part: ", toString calculateSumPart1 )
-        ( "Captcha sum for second part: ", toString calculateSumPart2)
+        [ { partData
+            | label = "1) First part"
+            , desc = "Captcha sum for first part: "
+            , solution = Just <| toString <| calculateSumPart1
+            }
+        , { partData
+            | label = "2) Second part"
+            , desc = "Captcha sum for second part: "
+            , solution = Just <| toString <| calculateSumPart2
+            }
+        ]
 
 
 calculateSumPart1 : Int

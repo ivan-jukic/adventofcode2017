@@ -1,5 +1,5 @@
 import Html exposing (..)
-import PuzzleView exposing (puzzleView)
+import PuzzleView exposing (puzzleView, partData)
 
 
 main: Program Never Model Msg
@@ -34,8 +34,17 @@ view : Model -> Html Msg
 view model =
     puzzleView
         "03 Spiraling memory"
-        ( "Number of steps is: ", toString calculateSteps )
-        ( "First number larger than " ++ (toString input) ++ " is: ", toString calculateFirstLargerNum )
+        [ { partData
+            | label = "1) First part"
+            , desc = "Number of steps is: "
+            , solution = Just <| toString <| calculateSteps
+            }
+        , { partData
+            | label = "2) Second part"
+            , desc = "First number larger than " ++ (toString input) ++ " is: "
+            , solution = Just <| toString <| calculateFirstLargerNum
+            }
+        ]
 
 
 calculateSteps : Int

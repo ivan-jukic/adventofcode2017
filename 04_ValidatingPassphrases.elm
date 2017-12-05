@@ -1,5 +1,5 @@
 import Html exposing (..)
-import PuzzleView exposing (puzzleView)
+import PuzzleView exposing (puzzleView, partData)
 import Dict
 
 main: Program Never Model Msg
@@ -34,8 +34,17 @@ view : Model -> Html Msg
 view model =
     puzzleView
         "04 High-Entropy Passphrases"
-        ( "Number of valid passphrases:", toString <| calculate False )
-        ( "Number of valid passphrases with anagrams:", toString <| calculate True )
+        [ { partData
+            | label = "1) Valid passphrases"
+            , desc = "Number of valid passphrases: "
+            , solution = Just <| toString <| calculate False
+            }
+        , { partData
+            | label = "2) Valid passphrases with anagrams"
+            , desc = "Number of valid passphrases with anagrams: "
+            , solution = Just <| toString <| calculate True
+            }
+        ]
 
 
 calculate : Bool -> Int

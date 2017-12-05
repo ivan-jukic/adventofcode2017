@@ -1,5 +1,5 @@
 import Html exposing (..)
-import PuzzleView exposing (puzzleView)
+import PuzzleView exposing (puzzleView, partData)
 import Regex exposing (regex, HowMany(All))
 
 
@@ -35,8 +35,17 @@ view : Model -> Html Msg
 view model =
     puzzleView
         "02 Corruption Checksum"
-        ( "Solution for the first part: ", toString calculateCheckSumPart1 )
-        ( "Solution for the second part: ", toString calculateCheckSumPart2 )
+        [ { partData
+            | label = "1) First part"
+            , desc = "Solution for the first part: "
+            , solution = Just <| toString <| calculateCheckSumPart1
+            }
+        , { partData
+            | label = "2) Second part"
+            , desc = "Solution for the second part: "
+            , solution = Just <| toString <| calculateCheckSumPart2
+            }
+        ]
 
 
 calculateCheckSumPart1 : Int
