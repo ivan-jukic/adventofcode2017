@@ -18,4 +18,4 @@ The fact that the bottom right corners are powers of odd numbers can be used to 
 - ### Day 4
 Simple but interesting puzzle. Second part runs quick if we check the string lengths first, before checking if it's an anagram.
 - ### Day 5
-Not particulary difficult, but unfortunatelly in the second part Elm didn't really prove to be optimized for 2M+ sequential actions, so JavaScript was used instead to find the solution (check out day 5 js file).
+Not particulary difficult, but unfortunately in the second part Elm didn't really prove to be optimized for 2M+ sequential actions, so JavaScript was used instead to find the solution (check out day 5 js file).
