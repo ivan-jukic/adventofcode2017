@@ -6,7 +6,7 @@ import Task exposing (perform, succeed)
 main : Program Never Model Msg
 main = 
     Html.program
-        { init = init
+        { init = ( init, perform (\_ -> NoOp) (succeed ()) )
         , view = view
         , update = update
         , subscriptions = subscriptions
@@ -16,20 +16,22 @@ main =
 -- MODEL
 
 type alias Model = 
-    { jumps : Int
+    { jumps1 : Int
+    , jumps2 : Int
     , current : Int
     , instructions : List Int
+    , busy : Bool
     }
 
-init : ( Model, Cmd Msg )
+
+init : Model
 init =
-    ( { jumps = 0
-      , current = 0
-      , instructions = getInput
-      }
-    --, part1NextInstruction
-    , Cmd.none
-    )
+    { jumps1 = 0
+    , jumps2 = 0
+    , current = 0
+    , instructions = getInput
+    , busy = False
+    }
 
 
 -- SUBSCRIPTIONS
@@ -41,7 +43,7 @@ subscriptions model =
 
 -- UPDATE
 
-type Msg = NoOp | NextInstruction
+type Msg = NoOp | StartPart1 | StartPart2 | NextInstruction Bool
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -49,7 +51,23 @@ update msg model =
         NoOp ->
             ( model, Cmd.none )
 
-        NextInstruction ->
+        StartPart1 ->
+            case model.busy of
+                False ->
+                    ( { init | busy = True }, nextInstruction False )
+
+                True ->
+                    ( model, Cmd.none )
+        
+        StartPart2 ->
+            case model.busy of
+                False ->
+                    ( { init | busy = True }, nextInstruction True )
+
+                True ->
+                    ( model, Cmd.none )
+
+        NextInstruction isPart2 ->
             case findNextInstruction model.current model.instructions of
                 Just (idx, instruction) ->
                     let
@@ -57,27 +75,29 @@ update msg model =
                             idx + instruction
 
                         newInstruction =
-                            instruction + 1
+                            case isPart2 && instruction >= 3 of
+                                True ->
+                                    instruction - 1
+
+                                False ->
+                                    instruction + 1
                     in
                     ( { model
-                        | jumps = model.jumps + 1
+                        | jumps1 = if not isPart2 then model.jumps1 + 1 else model.jumps1
+                        , jumps2 = if isPart2 then model.jumps2 + 1 else model.jumps2
                         , current = nextIdx
                         , instructions = model.instructions |> updateInstruction idx newInstruction
                         }
-                    , case nextIdx < 0 || nextIdx >= (List.length model.instructions) of
-                        True ->
-                            Cmd.none
-                        False ->
-                            part1NextInstruction
+                    , nextInstruction isPart2
                     )
 
                 Nothing ->
-                    ( model, Cmd.none )
+                    ( { model | busy = False }, Cmd.none )
 
 
-part1NextInstruction : Cmd Msg
-part1NextInstruction =
-    perform (\_ -> NextInstruction) (succeed ()) 
+nextInstruction : Bool -> Cmd Msg
+nextInstruction isPart2 =
+    perform (\_ -> NextInstruction isPart2 ) (succeed ()) 
 
 
 findNextInstruction : Int -> List Int -> Maybe (Int, Int)
@@ -118,17 +138,15 @@ view model =
         "05 A Maze of Twisty Trampolines, All Alike"
         [ { partData
             | label = "1) Number Of Jumps"
-            , desc = "Solution for this part of the puzzle: "
-            , button = Just NextInstruction
+            , desc = "Solution for first part of the puzzle: "
+            , button = Just (NextInstruction False)
             , buttonLabel = Just "Find No. of Jumps (388611)"
-            , solution = if model.jumps > 0 then model.jumps |> toString |> Just else Nothing
+            , solution = if model.jumps1 > 0 then model.jumps1 |> toString |> Just else Nothing
             }
         , { partData
             | label = "2) Puzzle Part"
-            , desc = "Solution for this part of the puzzle: "
-            , button = Nothing
-            , buttonLabel = Nothing
-            , solution = Nothing
+            , desc = "Solution for second part of the puzzle: "
+            , solution = Just <| "27763113 - solution was found using JS + Node, Elm solution should work, but it was too slow"
             }
         ]
 
