@@ -11,6 +11,7 @@ links =
     , "03_DizzySpiral.elm"
     , "04_ValidatingPassphrases.elm"
     , "05_EscapingInstructionHell.elm"
+    , "06_WhereToReallocate.elm"
     ]
 
 
