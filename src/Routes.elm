@@ -27,7 +27,7 @@ pathnames =
     , ( "04-validating-passphrases", Day04 )
     , ( "05-escaping-instruction-hell", Day05 )
     , ( "06-where-to-reallocate", Day06 )
-    , ( "07-tobenamed", Day07 )
+    , ( "07-crazy-recursive-circus-tree.", Day07 )
     ]
 
 

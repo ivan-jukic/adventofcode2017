@@ -39,7 +39,6 @@ gulp.task('sass', () => {
 /// ELM
 
 gulp.task('elm-init', elm.init);
-gulp.task('elm-watch', ['elm'], () => browserSync.reload)
 gulp.task('elm', ['elm-init'], () => {
     return gulp
         .src(['src/**/*.elm'])
@@ -69,7 +68,7 @@ gulp.task('start', cb => {
 
 gulp.task('watch', () => {
     gulp.watch(['scss/**/*.scss'], ['sass']);
-    gulp.watch(['src/**/*.elm'], ['elm-watch']);
+    gulp.watch(['src/**/*.elm'], ['elm']);
     gulp.watch('index.js', ['start']);
 });
 
@@ -82,7 +81,10 @@ gulp.task('browsersync', () => {
         open: false
         , port: appPort + 1
         , browser: 'google chrome'
-        , files: 'views/**/*.pug'
+        , files:
+            [ 'views/**/*.pug'
+            , 'static/js/**/*.js'
+            ]
         , proxy: {
             target: `localhost:${appPort}`
         }
