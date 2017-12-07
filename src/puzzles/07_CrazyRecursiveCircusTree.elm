@@ -2,6 +2,7 @@ module Puzzles.Day07 exposing (..)
 
 import Components.View exposing (puzzleView, partData)
 import Html exposing (..)
+import Html.Attributes exposing (class)
 import Regex exposing (..)
 import Dict exposing (Dict)
 import Task exposing (perform, succeed)
@@ -13,6 +14,7 @@ import Task exposing (perform, succeed)
 type alias Node =
     { weight : Int
     , childNodes : List String
+    , totalWeight : Int
     }
 
 
@@ -21,6 +23,7 @@ type alias Node =
 type Msg
     = NoOp
     | RootNode
+    | FindImbalance
 
 
 {-|
@@ -28,6 +31,7 @@ type Msg
 type alias Model = 
     { nodes : Dict String Node
     , rootNode : Maybe String
+    , imbalance : Maybe Int
     }
 
 
@@ -35,6 +39,7 @@ initialModel : ( Model, Cmd Msg )
 initialModel =
     ( { nodes = getInput
       , rootNode = Nothing
+      , imbalance = Nothing
       }
     , perform (\_ -> RootNode) (succeed ())
     )
@@ -67,30 +72,187 @@ update msg model =
                             )
                             Nothing
                 }
-            , Cmd.none
+            , perform (\_ -> FindImbalance) (succeed ())
             )
+
+        FindImbalance ->
+            case model.rootNode of
+                Just rootKey ->
+                    case Dict.get rootKey model.nodes of
+                        Just root ->
+                            let
+                                calculatedWeights =
+                                    calculateWeights rootKey model.nodes
+                            in
+                            ( { model
+                                | imbalance = Just <| findImbalance [ root ] calculatedWeights
+                                , nodes = calculatedWeights
+                                }
+                            , Cmd.none
+                            )
+
+                        Nothing ->
+                            ( model, Cmd.none )
+
+                Nothing ->
+                    ( model, Cmd.none )
+
+{-|
+-}
+findImbalance : List Node -> Dict String Node -> Int
+findImbalance levelNodes allNodes =
+    case List.length levelNodes > 0 of
+        True ->
+            let
+                nextLevelNodes =
+                    levelNodes
+                        |> List.foldl
+                            (\n c -> c ++ (getChildNodesWithChildren n allNodes) ) []
+
+                prevLevelImbalance =
+                    findImbalance nextLevelNodes allNodes
+            in
+            case prevLevelImbalance of
+                -1 ->
+                    let
+                        allBalances =
+                            levelNodes |> List.map (\n -> n.totalWeight)
+
+                        balanceValues =
+                            allBalances |> List.foldl (\b c -> if List.member b c then c else [ b ] ++ c ) []
+                    in
+                    case balanceValues of
+                        a::b::[] ->
+                            let
+                                _ = Debug.log "balances" balanceValues
+                            in
+                            -1 -- abs <| a - b
+
+                        _ ->
+                            prevLevelImbalance
+
+                _ ->
+                    prevLevelImbalance
+
+        False ->
+            -1
+
+
+{-|
+-}
+calculateWeights : String -> Dict String Node -> Dict String Node
+calculateWeights key allNodes =
+    case Dict.get key allNodes of
+        Just node ->
+            case List.length node.childNodes > 0 of
+                True ->
+                    let
+                        updatedNodes =
+                            node.childNodes
+                                |> List.foldl
+                                    (\k cNodes -> calculateWeights k cNodes ) allNodes
+
+                        childNodesTotalWeight =
+                            node.childNodes
+                                |> List.map
+                                    (\k ->
+                                        updatedNodes
+                                            |> Dict.get k
+                                            |> Maybe.andThen (\n -> Just n.totalWeight)
+                                            |> Maybe.withDefault 0
+                                    )
+                                |> List.sum
+                    in
+                    updatedNodes |> Dict.update key 
+                        (\node -> 
+                            case node of
+                                Just n ->
+                                    Just { n | totalWeight = n.weight + childNodesTotalWeight }
+
+                                Nothing ->
+                                    Nothing
+                        )
+
+                False ->
+                    allNodes
+                        |> Dict.update key
+                            (\node ->
+                                case node of
+                                    Just n ->
+                                        Just { n | totalWeight = n.weight }
+
+                                    Nothing ->
+                                        Nothing
+                            )
+
+        Nothing ->
+            allNodes
+
+
+
+{-|
+-}
+getChildNodesWithChildren : Node -> Dict String Node -> List Node
+getChildNodesWithChildren node allNodes =
+    node.childNodes
+        |> List.foldl
+            (\key cn ->
+                case Dict.get key allNodes of
+                    Just n ->
+                        case List.length n.childNodes > 0 of
+                            True ->
+                                cn ++ [ n ]
+
+                            False ->
+                                cn
+
+                    Nothing ->
+                        cn
+            )
+            []
 
 
 {-|
 -}
 view : Model -> Html Msg
 view model =
-    puzzleView
-        "Recursive Circus"
-        [ { partData
-            | label = "1) Root node"
-            , desc = "The name of the root node is: "
-            , solution = model.rootNode
-            }
-        , { partData
-            | label = "2) Second part"
-            , desc = "Solution for this part of the puzzle: "
-            , button = Nothing
-            , buttonLabel = Nothing
-            , solution = Nothing
-            }
+    div []
+        [ puzzleView
+            "Recursive Circus"
+            [ { partData
+                | label = "1) Root node"
+                , desc = "The name of the root node is: "
+                , solution = model.rootNode
+                }
+            , { partData
+                | label = "2) Second part"
+                , desc = "Solution for this part of the puzzle: "
+                , solution = model.imbalance |> Maybe.andThen (\i -> if i == -1 then Just "Couldn't find solution :(" else Just <| toString i)
+                }
+            ]
+        , case model.rootNode of
+            Just rootNode ->
+                printNode rootNode model.nodes
+
+            Nothing ->
+                text ""
         ]
 
+
+printNode : String -> Dict String Node -> Html Msg
+printNode key allNodes =
+    case Dict.get key allNodes of
+        Just node ->
+            div [ class "tree-node" ]
+                [ span [ class "node-info" ]
+                    [ text ( [ key, toString node.weight, toString node.totalWeight  ] |> String.join ", ")
+                    ]
+                , div [ class "child-nodes" ]
+                    ( node.childNodes |> List.map (\ck -> printNode ck allNodes) )
+                ]
+
+        Nothing ->
+            text ""
 
 {-|
 -}
@@ -116,12 +278,15 @@ getInput =
                                             
                                             Nothing ->
                                                 []
+                                    weight_ =
+                                        weight |> String.toInt |> Result.withDefault -1
                                 in
                                 dict
                                     |> Dict.insert
                                         key
-                                        { weight = weight |> String.toInt |> Result.withDefault -1
+                                        { weight = weight_
                                         , childNodes = childNodes
+                                        , totalWeight = 0
                                         }
                             _ ->
                                 dict
