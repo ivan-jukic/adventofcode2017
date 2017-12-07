@@ -1,27 +1,28 @@
+module Puzzles.Day02 exposing (..)
+
 import Html exposing (..)
-import PuzzleView exposing (puzzleView, partData)
+import Components.View exposing (puzzleView, partData)
 import Regex exposing (regex, HowMany(All))
 
 
-main: Program Never Model Msg
-main = 
-    Html.beginnerProgram { model = model, view = view, update = update }
+{-|
+-}
+type Msg = NoOp
 
 
--- MODEL
-
+{-|
+-}
 type alias Model = 
     {}
 
-model : Model
-model =
+
+initialModel : Model
+initialModel =
     {}
 
 
--- UPDATE
-
-type Msg = NoOp
-
+{-|
+-}
 update : Msg -> Model -> Model
 update msg model =
     case msg of
@@ -29,8 +30,8 @@ update msg model =
             model
 
 
--- VIEW
-
+{-|
+-}
 view : Model -> Html Msg
 view model =
     puzzleView
@@ -48,6 +49,8 @@ view model =
         ]
 
 
+{-|
+-}
 calculateCheckSumPart1 : Int
 calculateCheckSumPart1 =
     getInput
@@ -76,6 +79,8 @@ calculateCheckSumPart1 =
             |> List.sum
 
 
+{-|
+-}
 calculateCheckSumPart2 : Int
 calculateCheckSumPart2 =
     let        
@@ -114,6 +119,8 @@ calculateCheckSumPart2 =
         |> List.sum
  
 
+{-|
+-}
 getInput : List (List Int)
 getInput =
     input
@@ -132,6 +139,8 @@ getInput =
             )
 
 
+{-|
+-}
 input : String
 input =
     """1236 741 557 1029 144 101 1968 2159 1399 80 1139 1167 1695 82 90 2236

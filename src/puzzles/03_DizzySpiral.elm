@@ -1,26 +1,27 @@
+module Puzzles.Day03 exposing (..)
+
+import Components.View exposing (puzzleView, partData)
 import Html exposing (..)
-import PuzzleView exposing (puzzleView, partData)
 
 
-main: Program Never Model Msg
-main = 
-    Html.beginnerProgram { model = model, view = view, update = update }
+{-|
+-}
+type Msg = NoOp
 
 
--- MODEL
-
+{-|
+-}
 type alias Model = 
     {}
 
-model : Model
-model =
+
+initialModel : Model
+initialModel =
     {}
 
 
--- UPDATE
-
-type Msg = NoOp
-
+{-|
+-}
 update : Msg -> Model -> Model
 update msg model =
     case msg of
@@ -28,8 +29,8 @@ update msg model =
             model
 
 
--- VIEW
-
+{-|
+-}
 view : Model -> Html Msg
 view model =
     puzzleView
@@ -47,6 +48,8 @@ view model =
         ]
 
 
+{-|
+-}
 calculateSteps : Int
 calculateSteps =
     let
@@ -74,6 +77,8 @@ calculateSteps =
     (abs x) + (abs y)
 
 
+{-|
+-}
 calculateFirstLargerNum : Int
 calculateFirstLargerNum =
     let

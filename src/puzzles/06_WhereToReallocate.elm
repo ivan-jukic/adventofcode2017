@@ -1,22 +1,22 @@
+module Puzzles.Day06 exposing (..)
+
+import Components.View exposing (puzzleView, partData)
 import Html exposing (..)
-import PuzzleView exposing (puzzleView, partData)
 import Regex exposing (regex, HowMany(All))
 import Array exposing (Array)
 import Task exposing (perform, succeed)
 
 
-main: Program Never Model Msg
-main = 
-    Html.program
-        { init = init
-        , view = view
-        , update = update
-        , subscriptions = subscriptions
-        }
+{-|
+-}
+type Msg
+    = NoOp
+    | Cycle
+    | CycleSecond
 
 
--- MODEL
-
+{-|
+-}
 type alias Model = 
     { firstCycles : Int
     , secondCycles : Int
@@ -24,8 +24,9 @@ type alias Model =
     , prevStates : Array String
     }
 
-init : ( Model, Cmd Msg )
-init =
+
+initialModel : ( Model, Cmd Msg )
+initialModel =
     ( { firstCycles = 0
       , secondCycles = 0
       , memory = input
@@ -35,17 +36,8 @@ init =
     )
 
 
--- SUBSCRIPTIONS
-
-subscriptions : Model -> Sub Msg
-subscriptions model =
-    Sub.none
-
-
--- UPDATE
-
-type Msg = NoOp | Cycle | CycleSecond
-
+{-|
+-}
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -97,6 +89,8 @@ update msg model =
                     ( model, Cmd.none )
                 
 
+{-|
+-}
 cycle : Array Int -> Array String -> Maybe (Array Int, String, Bool)
 cycle memory prevStates =
     case findMax memory of
@@ -123,8 +117,10 @@ cycle memory prevStates =
 
         Nothing ->
             Nothing
-        
 
+
+{-|
+-}
 updateMem : Int -> Int -> Array Int -> Array Int
 updateMem currentIdx remaining memory =
     case ( memory |> Array.get currentIdx, remaining > 0 ) of
@@ -147,6 +143,8 @@ updateMem currentIdx remaining memory =
             memory
 
 
+{-|
+-}
 findMax : Array Int -> Maybe (Int, Int)
 findMax memory =
     memory
@@ -168,8 +166,8 @@ findMax memory =
             Nothing
 
 
--- VIEW
-
+{-|
+-}
 view : Model -> Html Msg
 view model =
     puzzleView
@@ -189,11 +187,8 @@ view model =
         ]
 
 
-calculate : Int
-calculate =
-    0
-
-
+{-|
+-}
 input : Array Int
 input =
     --"0 2 7 0"

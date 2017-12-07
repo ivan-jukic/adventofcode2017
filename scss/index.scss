@@ -1,0 +1,104 @@
+/// ...
+
+$color-primary: #3674AD;
+$color-background: #121E29;
+$color-buttons: #1e4b75;
+$color-buttons-hover: #276092;
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: $color-background;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#root-element {
+    height: 100%;
+
+    .root-view {
+        color: #FFF;
+        height: 100%;
+        padding: 100px;
+        font-size: 24px;
+        line-height: 32px;
+        font-family: "Courier New";
+    }
+}
+
+nav {
+    color: $color-primary;
+
+    .nav-menu {
+        padding-left: 20px;
+        display: inline-block;
+
+        li {
+            margin-right: 16px;
+            display: inline-block;
+        }
+
+        a {
+            width: 38px;
+            height: 38px;
+            padding: 4px;
+            color: #FFF;
+            cursor: pointer;
+            line-height: 34px;
+            text-align: center;
+            border-radius: 50px;
+            display: inline-block;
+            text-decoration: none;
+
+            &.active {
+                background-color: $color-buttons;
+            }
+
+            &:not(.active):hover {
+                text-decoration: underline;
+            }
+
+        }
+    }
+}
+
+.header {
+    padding-top: 36px;
+    margin-bottom: 50px;
+    color: $color-primary;
+    border-top: 3px solid $color-primary;
+}
+
+.pl {
+    padding-left: 12px;
+}
+
+.mb {
+    margin-bottom: 50px;
+}
+
+
+.button {
+    color: #FFF;
+    border: none;
+    cursor: pointer;
+    padding: 12px 16px;
+    border-radius: 4px;
+    background-color: $color-buttons;
+    transition: background-color 300ms ease-out;
+
+    &:hover {
+        background-color: $color-buttons-hover;
+    }
+}

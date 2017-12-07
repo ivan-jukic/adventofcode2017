@@ -1,0 +1,43 @@
+{
+  "name": "adventofcode2017",
+  "version": "1.0.0",
+  "description": "Solutions for Advent Of Code 2017 puzzles",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ivan-jukic/adventofcode2017.git"
+  },
+  "keywords": [
+    "advent of code 2017",
+    "advent of code",
+    "aoc2017",
+    "aoc"
+  ],
+  "author": "Ivan Jukic",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ivan-jukic/adventofcode2017/issues"
+  },
+  "homepage": "https://github.com/ivan-jukic/adventofcode2017#readme",
+  "dependencies": {
+    "koa": "^2.4.1",
+    "koa-morgan": "^1.0.1",
+    "koa-pug": "^3.0.0-2",
+    "koa-router": "^7.3.0",
+    "koa-static": "^4.0.2"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.18.13",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-cssmin": "^0.2.0",
+    "gulp-elm": "^0.7.2",
+    "gulp-nodemon": "^2.2.1",
+    "gulp-pug": "^3.3.0",
+    "gulp-sass": "^3.1.0",
+    "run-sequence": "^2.2.0"
+  }
+}

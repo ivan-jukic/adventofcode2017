@@ -1,9 +1,11 @@
+module Puzzles.Day05 exposing (..)
+
+import Components.View exposing (puzzleView, partData)
 import Html exposing (..)
-import PuzzleView exposing (puzzleView, partData)
 import Task exposing (perform, succeed)
 import Array exposing (Array)
 
-{-| part 2 solution in js
+{-- part 2 solution in js
 
 let step = 0;
 let current = 0;
@@ -30,21 +32,20 @@ const nextStep = () => {
 
 while(nextStep());
 
+--}
+
+
+{-|
 -}
+type Msg
+    = NoOp
+    | StartPart1
+    | StartPart2
+    | NextInstruction Bool
 
 
-main : Program Never Model Msg
-main = 
-    Html.program
-        { init = ( init, perform (\_ -> NoOp) (succeed ()) )
-        , view = view
-        , update = update
-        , subscriptions = subscriptions
-        }
-        
-
--- MODEL
-
+{-|
+-}
 type alias Model = 
     { jumps1 : Int
     , jumps2 : Int
@@ -64,17 +65,13 @@ init =
     }
 
 
--- SUBSCRIPTIONS
-
-subscriptions : Model -> Sub Msg
-subscriptions model =
-    Sub.none
+initialModel : ( Model, Cmd Msg )
+initialModel =
+    ( init, perform (\_ -> NoOp) (succeed ()) )
 
 
--- UPDATE
-
-type Msg = NoOp | StartPart1 | StartPart2 | NextInstruction Bool
-
+{-|
+-}
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -136,8 +133,8 @@ nextInstruction isPart2 =
     perform (\_ -> NextInstruction isPart2 ) (succeed ()) 
 
 
--- VIEW
-
+{-|
+-}
 view : Model -> Html Msg
 view model =
     puzzleView
@@ -159,18 +156,15 @@ view model =
         ]
 
 
-calculate : Int
-calculate =
-    0
-
-
--- INPUT
-
+{-|
+-}
 getInput : Array Int
 getInput =
     input |> String.split " " |> List.map (\n -> n |> String.toInt |> Result.withDefault 0) |> Array.fromList
 
 
+{-|
+-}
 input : String
 input =
     --"0 3 0 1 -3"

@@ -1,26 +1,28 @@
+module Puzzles.Day04 exposing (..)
+
 import Html exposing (..)
-import PuzzleView exposing (puzzleView, partData)
+import Components.View exposing (puzzleView, partData)
 import Dict
 
-main: Program Never Model Msg
-main = 
-    Html.beginnerProgram { model = model, view = view, update = update }
+
+{-|
+-}
+type Msg = NoOp
 
 
--- MODEL
-
+{-|
+-}
 type alias Model = 
     {}
 
-model : Model
-model =
+
+initialModel: Model
+initialModel =
     {}
 
 
--- UPDATE
-
-type Msg = NoOp
-
+{-|
+-}
 update : Msg -> Model -> Model
 update msg model =
     case msg of
@@ -28,8 +30,8 @@ update msg model =
             model
 
 
--- VIEW
-
+{-|
+-}
 view : Model -> Html Msg
 view model =
     puzzleView
@@ -47,6 +49,8 @@ view model =
         ]
 
 
+{-|
+-}
 calculate : Bool -> Int
 calculate checkAnagrams =
     let
@@ -91,11 +95,8 @@ calculate checkAnagrams =
             0
 
 
-calculate2 : Int
-calculate2 =
-    0
-
-
+{-|
+-}
 input1 : String
 input1 =
 
