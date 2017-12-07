@@ -8,7 +8,6 @@ import Dict exposing (Dict)
 import Task exposing (perform, succeed)
 
 
-
 {-|
 -}
 type alias Node =
@@ -78,14 +77,14 @@ update msg model =
         FindImbalance ->
             case model.rootNode of
                 Just rootKey ->
-                    case Dict.get rootKey model.nodes of
+                    let
+                        calculatedWeights =
+                            calculateWeights rootKey model.nodes
+                    in
+                    case Dict.get rootKey calculatedWeights of
                         Just root ->
-                            let
-                                calculatedWeights =
-                                    calculateWeights rootKey model.nodes
-                            in
                             ( { model
-                                | imbalance = Just <| findImbalance [ root ] calculatedWeights
+                                | imbalance = Just <| findImbalance root 0 calculatedWeights
                                 , nodes = calculatedWeights
                                 }
                             , Cmd.none
@@ -97,45 +96,43 @@ update msg model =
                 Nothing ->
                     ( model, Cmd.none )
 
+
 {-|
 -}
-findImbalance : List Node -> Dict String Node -> Int
-findImbalance levelNodes allNodes =
-    case List.length levelNodes > 0 of
-        True ->
+findImbalance : Node -> Int -> Dict String Node -> Int
+findImbalance imbalancedNode weightDiff allNodes =
+    let
+        allChildNodes =
+            getChildNodes imbalancedNode allNodes
+
+        imbalancedChildNode =
+            findImbalancedNodes allChildNodes
+    in
+    case imbalancedChildNode of
+        childNode::[] ->
             let
-                nextLevelNodes =
-                    levelNodes
-                        |> List.foldl
-                            (\n c -> c ++ (getChildNodesWithChildren n allNodes) ) []
-
-                prevLevelImbalance =
-                    findImbalance nextLevelNodes allNodes
+                balanceValue =
+                    allChildNodes |> List.foldl (\cn c -> if cn.totalWeight /= childNode.totalWeight && c == -1 then cn.totalWeight else c ) -1
             in
-            case prevLevelImbalance of
-                -1 ->
-                    let
-                        allBalances =
-                            levelNodes |> List.map (\n -> n.totalWeight)
+            findImbalance childNode (balanceValue - childNode.totalWeight) allNodes
 
-                        balanceValues =
-                            allBalances |> List.foldl (\b c -> if List.member b c then c else [ b ] ++ c ) []
-                    in
-                    case balanceValues of
-                        a::b::[] ->
-                            let
-                                _ = Debug.log "balances" balanceValues
-                            in
-                            -1 -- abs <| a - b
+        _ ->
+            imbalancedNode.weight + weightDiff
+    
 
-                        _ ->
-                            prevLevelImbalance
-
-                _ ->
-                    prevLevelImbalance
-
-        False ->
-            -1
+{-|
+-}
+findImbalancedNodes : List Node -> List Node
+findImbalancedNodes nodes =
+    nodes |> List.foldl
+        (\n1 c1 ->
+            let
+                hasSame =
+                    nodes |> List.foldl (\n2 c2 -> if n1.totalWeight == n2.totalWeight then c2 + 1 else c2) 0
+            in
+            if hasSame == 1 then c1 ++ [ n1 ] else c1
+        )
+        []
 
 
 {-|
@@ -189,22 +186,16 @@ calculateWeights key allNodes =
             allNodes
 
 
-
 {-|
 -}
-getChildNodesWithChildren : Node -> Dict String Node -> List Node
-getChildNodesWithChildren node allNodes =
+getChildNodes : Node -> Dict String Node -> List Node
+getChildNodes node allNodes =
     node.childNodes
         |> List.foldl
             (\key cn ->
                 case Dict.get key allNodes of
                     Just n ->
-                        case List.length n.childNodes > 0 of
-                            True ->
-                                cn ++ [ n ]
-
-                            False ->
-                                cn
+                        cn ++ [ n ]
 
                     Nothing ->
                         cn
@@ -230,15 +221,18 @@ view model =
                 , solution = model.imbalance |> Maybe.andThen (\i -> if i == -1 then Just "Couldn't find solution :(" else Just <| toString i)
                 }
             ]
+        {-- }
         , case model.rootNode of
             Just rootNode ->
                 printNode rootNode model.nodes
 
             Nothing ->
                 text ""
+        --}
         ]
 
-
+{-|
+-}
 printNode : String -> Dict String Node -> Html Msg
 printNode key allNodes =
     case Dict.get key allNodes of
@@ -253,6 +247,7 @@ printNode key allNodes =
 
         Nothing ->
             text ""
+
 
 {-|
 -}
