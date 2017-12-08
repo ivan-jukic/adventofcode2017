@@ -10,6 +10,7 @@ import Puzzles.Day04 as Day04
 import Puzzles.Day05 as Day05
 import Puzzles.Day06 as Day06
 import Puzzles.Day07 as Day07
+import Puzzles.Day08 as Day08
 import Routes
 import Navigation
 import Task exposing (perform, succeed)
@@ -26,6 +27,7 @@ type ContentModel
     | Content05 Day05.Model
     | Content06 Day06.Model
     | Content07 Day07.Model
+    | Content08 Day08.Model
 
 
 {-|
@@ -47,6 +49,7 @@ type Msg
     | Day05Msg Day05.Msg
     | Day06Msg Day06.Msg
     | Day07Msg Day07.Msg
+    | Day08Msg Day08.Msg
 
 
 {-|
@@ -144,6 +147,18 @@ update props msg model =
                 _ ->
                     ( model, Cmd.none )
 
+        Day08Msg msg ->
+            case model.content of
+                Content08 dayModel ->
+                    let
+                        ( updated, subCmd ) =
+                            Day08.update msg dayModel
+                    in
+                    ( { model | content = Content08 updated }, Cmd.map Day08Msg subCmd )
+
+                _ ->
+                    ( model, Cmd.none )
+
 
 {-|
 -}
@@ -173,6 +188,9 @@ view props model =
 
                 Content07 m ->
                     Day07.view m |> Html.map Day07Msg
+
+                Content08 m ->
+                    Day08.view m |> Html.map Day08Msg
 
                 _ ->
                     text ""
@@ -245,3 +263,14 @@ initDay07 =
             Day07.initialModel
     in
     ChangeContent (Content07 model) (Cmd.map Day07Msg subCmd)
+
+
+{-|
+-}
+initDay08 : Msg
+initDay08 =
+    let
+        (model, subCmd) =
+            Day08.initialModel
+    in
+    ChangeContent (Content08 model) (Cmd.map Day08Msg subCmd)

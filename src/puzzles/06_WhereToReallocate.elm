@@ -171,7 +171,7 @@ findMax memory =
 view : Model -> Html Msg
 view model =
     puzzleView
-        "Task title"
+        "06 Memory Reallocation"
         [ { partData
             | label = "1) First part"
             , desc = "Number of cycles before infinite loop: "

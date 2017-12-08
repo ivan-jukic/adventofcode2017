@@ -209,7 +209,7 @@ view : Model -> Html Msg
 view model =
     div []
         [ puzzleView
-            "Recursive Circus"
+            "07 Recursive Circus"
             [ { partData
                 | label = "1) Root node"
                 , desc = "The name of the root node is: "

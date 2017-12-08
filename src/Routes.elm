@@ -15,6 +15,7 @@ type Route
     | Day05
     | Day06
     | Day07
+    | Day08
 
 
 {-|
@@ -28,6 +29,7 @@ pathnames =
     , ( "05-escaping-instruction-hell", Day05 )
     , ( "06-where-to-reallocate", Day06 )
     , ( "07-crazy-recursive-circus-tree.", Day07 )
+    , ( "08-dont-touch-your-registers.", Day08 )
     ]
 
 
