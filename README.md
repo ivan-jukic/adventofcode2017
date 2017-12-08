@@ -25,3 +25,5 @@ Not particulary difficult, but unfortunately in the second part Elm's Lists didn
 Again some issues in regards of the speed, it is a bit slow but gives correct solution. Speed issues are probably manifesting because it's running with the debug flag on in elm reactor. Need to move to a standalone solution, might help.
 - ### Day 07
 Part one was a nice puzzle, but had some problems with part two. My point of view was wrong in the second part, and I had problems finding the propper node in the tree with imbalanced weight. Solution was to find first imbalanced node with balanced child nodes, while at first I was looking only imbalanced weights in the same level, which is obviously wrong. Also, being a bit nervous for no apparent reason does not help with focus and concentration :(...
+- ### Day 08
+Luckly this puzzle was much more straightforward than the previous one. It was only a matter of parsing the input and building a list of functions which represented the instructions. After that in steps, by recursive callss of the runInstructions function, we get registers after each step. Then we can find the max value after each instruction and the same at the end.
