@@ -11,6 +11,7 @@ import Puzzles.Day05 as Day05
 import Puzzles.Day06 as Day06
 import Puzzles.Day07 as Day07
 import Puzzles.Day08 as Day08
+import Puzzles.Day09 as Day09
 import Routes
 import Navigation
 import Task exposing (perform, succeed)
@@ -28,6 +29,7 @@ type ContentModel
     | Content06 Day06.Model
     | Content07 Day07.Model
     | Content08 Day08.Model
+    | Content09 Day09.Model
 
 
 {-|
@@ -50,6 +52,7 @@ type Msg
     | Day06Msg Day06.Msg
     | Day07Msg Day07.Msg
     | Day08Msg Day08.Msg
+    | Day09Msg Day09.Msg
 
 
 {-|
@@ -79,85 +82,58 @@ update props msg model =
         ChangeUrl url ->
             ( model, Navigation.newUrl url)
 
-        Day01Msg msg ->
-            case model.content of
-                Content01 dayModel ->
-                    ( { model | content = Content01 (Day01.update msg dayModel) }, Cmd.none )
+        _ ->
+            updateDay msg model
+
+
+{-|
+-}
+updateDay : Msg -> Model -> ( Model, Cmd Msg )
+updateDay msg model =
+    let
+        noSubCmd contentFn u =
+            ( contentFn u, Cmd.none )
+
+        withSubCmd contentFn tagger (u, sc) =
+            ( contentFn u, Cmd.map tagger sc )
+
+        ( updated, subCmd ) =
+            case ( model.content, msg ) of
+                ( Content01 m, Day01Msg msg ) ->
+                    Day01.update msg m |> noSubCmd Content01
+
+                ( Content02 m, Day02Msg msg ) ->
+                    Day02.update msg m |> noSubCmd Content02
+
+                ( Content03 m, Day03Msg msg ) ->
+                    Day03.update msg m |> noSubCmd Content03
+
+                ( Content04 m, Day04Msg msg ) ->
+                    Day04.update msg m |> noSubCmd Content04
+
+                ( Content05 m, Day05Msg msg ) ->
+                    Day05.update msg m |> withSubCmd Content05 Day05Msg
+
+                ( Content06 m, Day06Msg msg ) ->
+                    Day06.update msg m |> withSubCmd Content06 Day06Msg
+
+                ( Content07 m, Day07Msg msg ) ->
+                    Day07.update msg m |> withSubCmd Content07 Day07Msg
+
+                ( Content08 m, Day08Msg msg ) ->
+                    Day08.update msg m |> withSubCmd Content08 Day08Msg
+
+                ( Content09 m, Day09Msg msg ) ->
+                    Day09.update msg m |> withSubCmd Content09 Day09Msg
+
+                --( Content10 m, Day10Msg msg ) ->
+                --    Day10.update msg m |> withSubCmd Content10 Day10Msg
 
                 _ ->
-                    ( model, Cmd.none )
+                    ( model.content, Cmd.none )
+    in
+    ( { model | content = updated }, subCmd )
 
-        Day02Msg msg ->
-            case model.content of
-                Content02 dayModel ->
-                    ( { model | content = Content02 (Day02.update msg dayModel) }, Cmd.none )
-
-                _ ->
-                    ( model, Cmd.none )
-
-        Day03Msg msg ->
-            case model.content of
-                Content03 dayModel ->
-                    ( { model | content = Content03 (Day03.update msg dayModel) }, Cmd.none )
-
-                _ ->
-                    ( model, Cmd.none )
-        
-        Day04Msg msg ->
-            case model.content of
-                Content04 dayModel ->
-                    ( { model | content = Content04 (Day04.update msg dayModel) }, Cmd.none )
-
-                _ ->
-                    ( model, Cmd.none )
-        
-        Day05Msg msg ->
-            case model.content of
-                Content05 dayModel ->
-                    let
-                        ( updated, subCmd ) =
-                            Day05.update msg dayModel
-                    in
-                    ( { model | content = Content05 updated }, Cmd.map Day05Msg subCmd )
-
-                _ ->
-                    ( model, Cmd.none )
-
-        Day06Msg msg ->
-            case model.content of
-                Content06 dayModel ->
-                    let
-                        ( updated, subCmd ) =
-                            Day06.update msg dayModel
-                    in
-                    ( { model | content = Content06 updated }, Cmd.map Day06Msg subCmd )
-
-                _ ->
-                    ( model, Cmd.none )
-
-        Day07Msg msg ->
-            case model.content of
-                Content07 dayModel ->
-                    let
-                        ( updated, subCmd ) =
-                            Day07.update msg dayModel
-                    in
-                    ( { model | content = Content07 updated }, Cmd.map Day07Msg subCmd )
-
-                _ ->
-                    ( model, Cmd.none )
-
-        Day08Msg msg ->
-            case model.content of
-                Content08 dayModel ->
-                    let
-                        ( updated, subCmd ) =
-                            Day08.update msg dayModel
-                    in
-                    ( { model | content = Content08 updated }, Cmd.map Day08Msg subCmd )
-
-                _ ->
-                    ( model, Cmd.none )
 
 
 {-|
@@ -191,6 +167,9 @@ view props model =
 
                 Content08 m ->
                     Day08.view m |> Html.map Day08Msg
+
+                Content09 m ->
+                    Day09.view m |> Html.map Day09Msg
 
                 _ ->
                     text ""
@@ -274,3 +253,14 @@ initDay08 =
             Day08.initialModel
     in
     ChangeContent (Content08 model) (Cmd.map Day08Msg subCmd)
+
+
+{-|
+-}
+initDay09 : Msg
+initDay09 =
+    let
+        (model, subCmd) =
+            Day09.initialModel
+    in
+    ChangeContent (Content09 model) (Cmd.map Day09Msg subCmd)

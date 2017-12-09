@@ -6,7 +6,8 @@ import Html exposing (..)
 
 {-|
 -}
-type Msg = NoOp
+type Msg
+    = NoOp
 
 
 {-|
@@ -17,7 +18,7 @@ type alias Model =
 
 initialModel : ( Model, Cmd Msg )
 initialModel =
-    ({}, Cmd.none )
+    ( {}, Cmd.none )
 
 
 {-|
