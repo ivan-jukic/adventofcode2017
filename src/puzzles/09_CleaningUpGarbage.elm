@@ -2,23 +2,32 @@ module Puzzles.Day09 exposing (..)
 
 import Components.View exposing (puzzleView, partData)
 import Html exposing (..)
+import Html.Attributes exposing (..)
+import Task exposing (perform, succeed)
 
 
 {-|
 -}
 type Msg
     = NoOp
+    | Init
 
 
 {-|
 -}
 type alias Model = 
-    {}
+    { partOne : Maybe String
+    , partTwo : Maybe String
+    }
 
 
 initialModel : ( Model, Cmd Msg )
 initialModel =
-    ( {}, Cmd.none )
+    ( { partOne = Nothing
+      , partTwo = Nothing
+      }
+    , perform (\_ -> Init) (succeed ())
+    )
 
 
 {-|
@@ -28,6 +37,13 @@ update msg model =
     case msg of
         NoOp ->
             ( model, Cmd.none )
+
+        Init ->
+            let
+                (p1, p2) =
+                    parseInput
+            in
+            ( { partOne = Just <| toString p1, partTwo = Just <| toString p2 }, Cmd.none )
 
 
 {-|
@@ -72,7 +88,7 @@ parseInput =
                                         _ ->
                                             (s, g, currentGroup, False, False)
 
-                        _ = Debug.log (c |> toString) newOut
+                        --_ = Debug.log (c |> toString) newOut
                     in
                     newOut
                 )
@@ -85,22 +101,20 @@ parseInput =
 -}
 view : Model -> Html Msg
 view model =
-    let
-        (p1, p2) =
-            parseInput
-    in
-    puzzleView
-        "09 Stream Processing"
-        [ { partData
-            | label = "1) Groups score"
-            , desc = "Score for all groups of the input: "
-            , solution = p1 |> toString |> Just
-            }
-        , { partData
-            | label = "2) Second part"
-            , desc = "Solution for this part of the puzzle: "
-            , solution = p2 |> toString |> Just
-            }
+    div [ class "solution solution-9" ]
+        [ puzzleView
+            "09 Stream Processing"
+            [ { partData
+                | label = "1) Groups score"
+                , desc = "Score for all groups of the input: "
+                , solution = model.partOne
+                }
+            , { partData
+                | label = "2) Second part"
+                , desc = "Solution for this part of the puzzle: "
+                , solution = model.partTwo
+                }
+            ]
         ]
 
 

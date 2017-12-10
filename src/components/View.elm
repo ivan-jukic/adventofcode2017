@@ -28,7 +28,7 @@ partData =
 
 puzzleView : String -> List (PartData msg) -> Html msg
 puzzleView puzzleTitle parts =
-    div [ class "part" ]
+    div [ class "puzzle-view" ]
         [ h1 [ class "header" ]
             [ text puzzleTitle ]
         , div [] ( parts |> List.map renderPart )

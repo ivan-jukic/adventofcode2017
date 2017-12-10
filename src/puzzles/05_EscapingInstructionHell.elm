@@ -2,6 +2,7 @@ module Puzzles.Day05 exposing (..)
 
 import Components.View exposing (puzzleView, partData)
 import Html exposing (..)
+import Html.Attributes exposing (..)
 import Task exposing (perform, succeed)
 import Array exposing (Array)
 
@@ -137,22 +138,24 @@ nextInstruction isPart2 =
 -}
 view : Model -> Html Msg
 view model =
-    puzzleView
-        "05 A Maze of Twisty Trampolines, All Alike"
-        [ { partData
-            | label = "1) Number Of Jumps"
-            , desc = "Solution for first part of the puzzle: "
-            , button = Just StartPart1
-            , buttonLabel = Just "Start! (solution 388611)"
-            , solution = if model.jumps1 > 0 then model.jumps1 |> toString |> Just else Nothing
-            }
-        , { partData
-            | label = "2) Puzzle Part"
-            , desc = "Solution for second part of the puzzle: "            
-            , button = Just StartPart2
-            , buttonLabel = Just "Start (solution 27763113)"
-            , solution = if model.jumps2 > 0 then model.jumps2 |> toString |> Just else Nothing
-            }
+    div [ class "solution solution-5" ]
+        [ puzzleView
+            "05 A Maze of Twisty Trampolines, All Alike"
+            [ { partData
+                | label = "1) Number Of Jumps"
+                , desc = "Solution for first part of the puzzle: "
+                , button = Just StartPart1
+                , buttonLabel = Just "Start! (solution 388611)"
+                , solution = if model.jumps1 > 0 then model.jumps1 |> toString |> Just else Nothing
+                }
+            , { partData
+                | label = "2) Puzzle Part"
+                , desc = "Solution for second part of the puzzle: "            
+                , button = Just StartPart2
+                , buttonLabel = Just "Start (solution 27763113)"
+                , solution = if model.jumps2 > 0 then model.jumps2 |> toString |> Just else Nothing
+                }
+            ]
         ]
 
 

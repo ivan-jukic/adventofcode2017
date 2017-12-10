@@ -2,6 +2,7 @@ module Puzzles.Day06 exposing (..)
 
 import Components.View exposing (puzzleView, partData)
 import Html exposing (..)
+import Html.Attributes exposing (..)
 import Regex exposing (regex, HowMany(All))
 import Array exposing (Array)
 import Task exposing (perform, succeed)
@@ -170,20 +171,23 @@ findMax memory =
 -}
 view : Model -> Html Msg
 view model =
-    puzzleView
-        "06 Memory Reallocation"
-        [ { partData
-            | label = "1) First part"
-            , desc = "Number of cycles before infinite loop: "
-            , button = Just Cycle
-            , buttonLabel = Just "Click to solve (11137)"
-            , solution = if model.firstCycles > 0 then Just <| toString model.firstCycles else Nothing
-            }
-        , { partData
-            | label = "2) Second part"
-            , desc = "Solution for this part is calculated from the first part: "
-            , solution = if model.secondCycles > 0 then Just <| toString model.secondCycles else Just "1037"
-            }
+
+    div [ class "solution solution-6" ]
+        [ puzzleView
+            "06 Memory Reallocation"
+            [ { partData
+                | label = "1) First part"
+                , desc = "Number of cycles before infinite loop: "
+                , button = Just Cycle
+                , buttonLabel = Just "Click to solve (11137)"
+                , solution = if model.firstCycles > 0 then Just <| toString model.firstCycles else Nothing
+                }
+            , { partData
+                | label = "2) Second part"
+                , desc = "Solution for this part is calculated from the first part: "
+                , solution = if model.secondCycles > 0 then Just <| toString model.secondCycles else Just "1037"
+                }
+            ]
         ]
 
 

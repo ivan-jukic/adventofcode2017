@@ -21,17 +21,17 @@ type Route
 
 {-|
 -}
-pathnames : List ( String, Route )
+pathnames : List ( Route, String, String )
 pathnames =
-    [ ( "01-50-little-bugs-on-the-wall",  Day01 )
-    , ( "02-fixing-spreadsheets", Day02 )
-    , ( "03-dizzy-spiral", Day03 )
-    , ( "04-validating-passphrases", Day04 )
-    , ( "05-escaping-instruction-hell", Day05 )
-    , ( "06-where-to-reallocate", Day06 )
-    , ( "07-crazy-recursive-circus-tree.", Day07 )
-    , ( "08-dont-touch-your-registers.", Day08 )
-    , ( "09-cleaning-up-garbage", Day09 )
+    [ ( Day01, "01-50-little-bugs-on-the-wall", "Inverse Captcha" )
+    , ( Day02, "02-fixing-spreadsheets", "Corruption Checksum" )
+    , ( Day03, "03-dizzy-spiral", "Spiral Memory" )
+    , ( Day04, "04-validating-passphrases", "High-Entropy Passphrases" )
+    , ( Day05, "05-escaping-instruction-hell", "A Maze of Twisty Trampolines, All Alike" )
+    , ( Day06, "06-where-to-reallocate", "Memory Reallocation" )
+    , ( Day07, "07-crazy-recursive-circus-tree.", "Recursive Circus" )
+    , ( Day08, "08-dont-touch-your-registers.", "I Heard You Like Registers" )
+    , ( Day09, "09-cleaning-up-garbage", "Stream Processing" )
     ]
 
 
@@ -40,7 +40,7 @@ pathnames =
 parser : Parser (Route -> a) a
 parser =
     pathnames
-        |> List.map (\( pathname, route ) -> map route (s pathname) )
+        |> List.map (\( route, pathname, _ ) -> map route (s pathname) )
         |> oneOf
 
 
@@ -59,5 +59,5 @@ defaultRedirect : Cmd msg
 defaultRedirect =
     pathnames
         |> List.head
-        |> Maybe.andThen(\(pathname, _) -> Just <| Navigation.newUrl ("/" ++ pathname))
+        |> Maybe.andThen(\(_, pathname, _) -> Just <| Navigation.newUrl ("/" ++ pathname))
         |> Maybe.withDefault Cmd.none

@@ -1,0 +1,73 @@
+// ...
+
+#root-element {
+    height: 100%;
+
+    .root-view {
+        color: #FFF;
+        height: 100%;
+        line-height: 32px;
+        font-family: "Courier New";
+
+        &:before {
+            content: "";
+            top: 0;
+            width: 100%;
+            display: block;
+            position: absolute;
+            height: $menu-header-height;
+            background-color: $color-background-light;
+        }
+    }
+}
+
+.puzzle-content {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    font-size: 24px;
+    overflow: hidden;
+    left: $menu-width;
+    position: absolute;
+
+    > .solution {
+        top: 64px;
+        left: 50%;
+        bottom: 64px;
+        width: 1200px;
+        padding: 32px;
+        position: absolute;
+        border-radius: 4px;
+        transform: translate(-50%, 5%);
+        background-color: $color-primary;
+        box-shadow: 0 0 50px $color-shadow;
+
+        .header {
+            color: #000;
+            padding: 32px;
+            font-size: 28px;
+            border-radius: 4px 4px 0 0;
+            margin: -32px -32px 64px -32px;
+            background-color: $color-primary-light;
+        }
+    }
+
+    @for $i from 1 through 25 {
+        > .solution-#{$i} {
+            opacity: 0;
+            animation: showSolution forwards 200ms ease-out;        
+        }
+    }
+}
+
+@keyframes showSolution {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, 5%);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}

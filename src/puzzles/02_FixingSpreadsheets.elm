@@ -1,8 +1,9 @@
 module Puzzles.Day02 exposing (..)
 
-import Html exposing (..)
 import Components.View exposing (puzzleView, partData)
 import Regex exposing (regex, HowMany(All))
+import Html exposing (..)
+import Html.Attributes exposing (..)
 
 
 {-|
@@ -33,19 +34,21 @@ update msg model =
 {-|
 -}
 view : Model -> Html Msg
-view model =
-    puzzleView
-        "02 Corruption Checksum"
-        [ { partData
-            | label = "1) First part"
-            , desc = "Solution for the first part: "
-            , solution = Just <| toString <| calculateCheckSumPart1
-            }
-        , { partData
-            | label = "2) Second part"
-            , desc = "Solution for the second part: "
-            , solution = Just <| toString <| calculateCheckSumPart2
-            }
+view model =    
+    div [ class "solution solution-2" ]
+        [ puzzleView
+            "02 Corruption Checksum"
+            [ { partData
+                | label = "1) First part"
+                , desc = "Solution for the first part: "
+                , solution = Just <| toString <| calculateCheckSumPart1
+                }
+            , { partData
+                | label = "2) Second part"
+                , desc = "Solution for the second part: "
+                , solution = Just <| toString <| calculateCheckSumPart2
+                }
+            ]
         ]
 
 

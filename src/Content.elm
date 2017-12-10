@@ -142,7 +142,7 @@ view : Props p -> Model -> Html Msg
 view props model =
     div [ class "root-view" ]
         [ ChangeUrl |> menuView props.route
-        , div []
+        , div [ class "puzzle-content" ]
             [ case model.content of
                 Content01 m ->
                     Day01.view m |> Html.map Day01Msg

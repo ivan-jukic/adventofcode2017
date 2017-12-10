@@ -1,0 +1,83 @@
+/// ...
+
+nav {
+    top: 0;
+    left: 0;
+    opacity: 0;
+    height: 100%;
+    display: block;
+    overflow: auto;
+    width: $menu-width;
+    position: absolute;
+    box-shadow: 0 0 30px $color-shadow;
+    background-color: $color-menu-background;
+    animation: showNav forwards 200ms ease-out;
+
+    h1 {
+        margin: 0;
+        padding: 32px;
+        font-size: 28px;
+        height: $menu-header-height;
+        background-color: $color-primary-light;
+
+        span {
+            color: #000;
+            display: block;
+            font-size: 18px;
+        }
+    }
+
+    .nav-menu {
+        bottom: 0px;
+        overflow: auto;
+        position: absolute;
+        top: $menu-header-height;
+        padding: 12px 24px 24px 24px;
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        a {
+            color: #FFF;
+            display: block;
+            cursor: pointer;
+            line-height: 24px;
+            position: relative;
+            border-radius: 4px;
+            text-decoration: none;
+            padding: 8px 12px 8px 48px;
+            background-color: transparent;
+            transition: background-color 200ms ease-out;
+
+            &.active {
+                background-color: $color-menu-active;
+            }
+
+            &:not(.active):hover {
+                background-color: $color-menu-active;
+            }
+
+            .day-count {
+                top: 8px;
+                left: 8px;
+                color: #000;
+                font-size: 18px;
+                position: absolute;
+                font-weight: bold;
+            }
+        }
+    }
+
+    @keyframes showNav {
+        0% {
+            opacity: 0;
+            left: -50px;
+        }
+
+        100% {
+            opacity: 1;
+            left: 0;
+        }
+    }
+}

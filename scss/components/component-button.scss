@@ -1,0 +1,15 @@
+// ...
+
+.button {
+    color: #FFF;
+    border: none;
+    cursor: pointer;
+    padding: 12px 16px;
+    border-radius: 4px;
+    background-color: $color-buttons;
+    transition: background-color 300ms ease-out;
+
+    &:hover {
+        background-color: $color-buttons-hover;
+    }
+}

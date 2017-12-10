@@ -2,6 +2,7 @@ module Puzzles.Day08 exposing (..)
 
 import Components.View exposing (puzzleView, partData)
 import Html exposing (..)
+import Html.Attributes exposing (class)
 import Regex exposing (..)
 import Dict exposing (Dict)
 import Task exposing (perform, succeed)
@@ -92,18 +93,20 @@ runInstructions ins highestVal reg =
 -}
 view : Model -> Html Msg
 view model =
-    puzzleView
-        "08 I Heard You Like Registers"
-        [ { partData
-            | label = "1) Max value "
-            , desc = "Max value in registers after instruction exec: "
-            , solution = model.partOne |> Maybe.andThen (\v -> toString v |> Just)
-            }
-        , { partData
-            | label = "2) Max value ever held"
-            , desc = "Max value ever held by a register: "
-            , solution = model.partTwo |> Maybe.andThen (\v -> toString v |> Just)
-            }
+    div [ class "solution solution-8" ]
+        [ puzzleView
+            "08 I Heard You Like Registers"
+            [ { partData
+                | label = "1) Max value "
+                , desc = "Max value in registers after instruction exec: "
+                , solution = model.partOne |> Maybe.andThen (\v -> toString v |> Just)
+                }
+            , { partData
+                | label = "2) Max value ever held"
+                , desc = "Max value ever held by a register: "
+                , solution = model.partTwo |> Maybe.andThen (\v -> toString v |> Just)
+                }
+            ]
         ]
 
 

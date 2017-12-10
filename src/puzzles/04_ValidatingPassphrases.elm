@@ -1,7 +1,8 @@
 module Puzzles.Day04 exposing (..)
 
-import Html exposing (..)
 import Components.View exposing (puzzleView, partData)
+import Html exposing (..)
+import Html.Attributes exposing (..)
 import Dict
 
 
@@ -34,18 +35,20 @@ update msg model =
 -}
 view : Model -> Html Msg
 view model =
-    puzzleView
-        "04 High-Entropy Passphrases"
-        [ { partData
-            | label = "1) Valid passphrases"
-            , desc = "Number of valid passphrases: "
-            , solution = Just <| toString <| calculate False
-            }
-        , { partData
-            | label = "2) Valid passphrases with anagrams"
-            , desc = "Number of valid passphrases with anagrams: "
-            , solution = Just <| toString <| calculate True
-            }
+    div [ class "solution solution-4" ]
+        [ puzzleView
+            "04 High-Entropy Passphrases"
+            [ { partData
+                | label = "1) Valid passphrases"
+                , desc = "Number of valid passphrases: "
+                , solution = Just <| toString <| calculate False
+                }
+            , { partData
+                | label = "2) Valid passphrases with anagrams"
+                , desc = "Number of valid passphrases with anagrams: "
+                , solution = Just <| toString <| calculate True
+                }
+            ]
         ]
 
 

@@ -11,24 +11,33 @@ import Routes exposing (Route(..), pathnames)
 menuView : Route -> (String -> msg) -> Html msg
 menuView current urlChange =
     nav []
-        [ text "Select puzzle"
+        [ h1 []
+            [ text "Advent Of Code"
+            , span [] [ text "Solutions for 2017" ]
+            ]
         , ul [ class "nav-menu" ]
             ( pathnames
                 |> List.indexedMap
-                    (\idx (lnk, r) ->
-                        urlChange |> menuItem idx lnk (r == current)
+                    (\idx (r, lnk, ttl) ->
+                        urlChange |> menuItem idx lnk ttl (r == current)
                     )
             )
         ]
 
 {-|
 -}
-menuItem : Int -> String -> Bool -> (String -> msg) -> Html msg
-menuItem idx lnk isCurrent urlChange =
+menuItem : Int -> String -> String -> Bool -> (String -> msg) -> Html msg
+menuItem idx lnk ttl isCurrent urlChange =
+    let
+        idxStr =
+            (if idx < 9 then "0" else "") ++ (toString (idx + 1))
+    in
     li []
         [ a [ onClick (urlChange lnk)
             , classList [ ("active", isCurrent) ]
             ]
-            [ text ((if idx < 9 then "0" else "") ++ (toString (idx + 1)))
+            [ span [ class "day-count" ]
+                [ text idxStr]
+            , text ttl
             ]
         ]

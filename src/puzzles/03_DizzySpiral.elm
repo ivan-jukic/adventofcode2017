@@ -2,6 +2,7 @@ module Puzzles.Day03 exposing (..)
 
 import Components.View exposing (puzzleView, partData)
 import Html exposing (..)
+import Html.Attributes exposing (..)
 
 
 {-|
@@ -32,19 +33,21 @@ update msg model =
 {-|
 -}
 view : Model -> Html Msg
-view model =
-    puzzleView
-        "03 Spiraling memory"
-        [ { partData
-            | label = "1) First part"
-            , desc = "Number of steps is: "
-            , solution = Just <| toString <| calculateSteps
-            }
-        , { partData
-            | label = "2) Second part"
-            , desc = "First number larger than " ++ (toString input) ++ " is: "
-            , solution = Just <| toString <| calculateFirstLargerNum
-            }
+view model =    
+    div [ class "solution solution-3" ]
+        [ puzzleView
+            "03 Spiraling memory"
+            [ { partData
+                | label = "1) First part"
+                , desc = "Number of steps is: "
+                , solution = Just <| toString <| calculateSteps
+                }
+            , { partData
+                | label = "2) Second part"
+                , desc = "First number larger than " ++ (toString input) ++ " is: "
+                , solution = Just <| toString <| calculateFirstLargerNum
+                }
+            ]
         ]
 
 

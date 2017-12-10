@@ -207,7 +207,7 @@ getChildNodes node allNodes =
 -}
 view : Model -> Html Msg
 view model =
-    div []
+    div [ class "solution solution-7" ]
         [ puzzleView
             "07 Recursive Circus"
             [ { partData

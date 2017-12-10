@@ -1,129 +1,17 @@
-/// ...
+/// core
 
-$color-primary: #3674AD;
-$color-background: #121E29;
-$color-buttons: #1e4b75;
-$color-buttons-hover: #276092;
+@import 'core/core-variables.scss';
 
-html,
-body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    background-color: $color-background;
-}
+/// components
 
-* {
-    box-sizing: border-box;
-}
+@import 'components/component-menu.scss';
+@import 'components/component-page.scss';
+@import 'components/component-button.scss';
 
-ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
+/// pages
 
-#root-element {
-    height: 100%;
+@import 'page/day-07.scss';
 
-    .root-view {
-        color: #FFF;
-        height: 100%;
-        padding: 100px;
-        font-size: 24px;
-        line-height: 32px;
-        font-family: "Courier New";
-    }
-}
+/// main
 
-nav {
-    color: $color-primary;
-
-    .nav-menu {
-        padding-left: 20px;
-        display: inline-block;
-
-        li {
-            margin-right: 16px;
-            display: inline-block;
-        }
-
-        a {
-            width: 38px;
-            height: 38px;
-            padding: 4px;
-            color: #FFF;
-            cursor: pointer;
-            line-height: 34px;
-            text-align: center;
-            border-radius: 50px;
-            display: inline-block;
-            text-decoration: none;
-
-            &.active {
-                background-color: $color-buttons;
-            }
-
-            &:not(.active):hover {
-                text-decoration: underline;
-            }
-
-        }
-    }
-}
-
-.header {
-    padding-top: 36px;
-    margin-bottom: 50px;
-    color: $color-primary;
-    border-top: 3px solid $color-primary;
-}
-
-.pl {
-    padding-left: 12px;
-}
-
-.mb {
-    margin-bottom: 50px;
-}
-
-
-.button {
-    color: #FFF;
-    border: none;
-    cursor: pointer;
-    padding: 12px 16px;
-    border-radius: 4px;
-    background-color: $color-buttons;
-    transition: background-color 300ms ease-out;
-
-    &:hover {
-        background-color: $color-buttons-hover;
-    }
-}
-
-.tree-node {
-    padding: 10px;
-    font-size: 12px;
-    text-align: center;
-    display: inline-block;
-    margin: 0 5px;
-    border-radius: 4px;
-    border: 1px solid $color-buttons-hover;
-
-    .node-info {
-        padding: 10px;
-        width: 120px;
-        font-weight: bold;
-        border-radius: 4px;
-        display: inline-block;
-        background-color: $color-buttons;
-    }
-
-    .child-nodes {
-        display: block;
-        white-space: nowrap;
-        margin-top: 10px;
-    }
-}
+@import 'main.scss';
