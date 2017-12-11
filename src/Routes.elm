@@ -17,6 +17,7 @@ type Route
     | Day07
     | Day08
     | Day09
+    | Day10
 
 
 {-|
@@ -32,6 +33,7 @@ pathnames =
     , ( Day07, "07-crazy-recursive-circus-tree.", "Recursive Circus" )
     , ( Day08, "08-dont-touch-your-registers.", "I Heard You Like Registers" )
     , ( Day09, "09-cleaning-up-garbage", "Stream Processing" )
+    , ( Day10, "10-knot-hash", "Knot Hash" )
     ]
 
 
