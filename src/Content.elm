@@ -129,8 +129,8 @@ updateDay msg model =
                 ( Content09 m, Day09Msg msg ) ->
                     Day09.update msg m |> withSubCmd Content09 Day09Msg
 
-                --( Content10 m, Day10Msg msg ) ->
-                --    Day10.update msg m |> withSubCmd Content10 Day10Msg
+                ( Content10 m, Day10Msg msg ) ->
+                    Day10.update msg m |> withSubCmd Content10 Day10Msg
 
                 _ ->
                     ( model.content, Cmd.none )
