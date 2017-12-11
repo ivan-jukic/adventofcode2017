@@ -1,5 +1,8 @@
 // ...
 
+$offset-m: 48px;
+$offset-l: 64px;
+
 #root-element {
     height: 100%;
 
@@ -15,8 +18,12 @@
             width: 100%;
             display: block;
             position: absolute;
-            height: $menu-header-height;
+            height: $menu-header-height-m;
             background-color: $color-background-light;
+
+            @media screen and (min-width: $breakpoint-l) {
+                height: $menu-header-height-l;
+            }
         }
     }
 }
@@ -25,42 +32,79 @@
     top: 0;
     right: 0;
     bottom: 0;
-    font-size: 24px;
+    font-size: 18px;
     overflow: hidden;
-    left: $menu-width;
     position: absolute;
+    left: $menu-width-m;
+    
+    @media screen and (min-width: $breakpoint-l) {
+        font-size: 24px;
+        left: $menu-width-l;
+    }
 
     > .solution {
-        top: 64px;
-        left: 50%;
-        bottom: 64px;
-        width: 1200px;
+        width: auto;
+        top: $offset-m;
+        left: $offset-m;
+        right: $offset-m;
+        bottom: $offset-m;
         padding: 32px;
         position: absolute;
         border-radius: 4px;
-        transform: translate(-50%, 5%);
         background-color: $color-primary;
         box-shadow: 0 0 50px $color-shadow;
 
+        @media screen and (min-width: $breakpoint-l) {
+            left: 50%;
+            right: auto;
+            width: 1200px;
+            top: $offset-l;
+            bottom: $offset-l;
+            transform: translate(-50%, 5%);
+        }
+
         .header {
             color: #000;
-            padding: 32px;
-            font-size: 28px;
+            padding: 24px 32px;
+            font-size: 22px;
             border-radius: 4px 4px 0 0;
             margin: -32px -32px 64px -32px;
             background-color: $color-primary-light;
+            
+            @media screen and (min-width: $breakpoint-l) {
+                padding: 32px;
+                font-size: 28px;
+            }
         }
     }
 
     @for $i from 1 through 25 {
         > .solution-#{$i} {
             opacity: 0;
-            animation: showSolution forwards 200ms ease-out;        
+
+            @media screen and (max-width: ($breakpoint-l - 1)) {
+                animation: showSolutionM forwards 200ms ease-out;
+            }
+
+            @media screen and (min-width: $breakpoint-l) {
+                animation: showSolutionXL forwards 200ms ease-out;        
+            }
         }
     }
 }
 
-@keyframes showSolution {
+@keyframes showSolutionM {
+    0% {
+        opacity: 0;
+        transform: translateY(5%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0%);
+    }
+}
+
+@keyframes showSolutionXL {
     0% {
         opacity: 0;
         transform: translate(-50%, 5%);

@@ -7,23 +7,39 @@ nav {
     height: 100%;
     display: block;
     overflow: auto;
-    width: $menu-width;
     position: absolute;
+    width: $menu-width-m;
     box-shadow: 0 0 30px $color-shadow;
     background-color: $color-menu-background;
     animation: showNav forwards 200ms ease-out;
+    
+    @media screen and (min-width: $breakpoint-l) {
+        width: $menu-width-l;
+    }
 
     h1 {
         margin: 0;
-        padding: 32px;
-        font-size: 28px;
-        height: $menu-header-height;
+        font-size: 22px;
+        line-height: 24px;
+        padding: 24px 32px;
+        height: $menu-header-height-m;
         background-color: $color-primary-light;
-
+        
+        @media screen and (min-width: $breakpoint-l) {
+            padding: 32px;
+            font-size: 28px;
+            line-height: auto;
+            height: $menu-header-height-l;
+        }
+        
         span {
             color: #000;
             display: block;
-            font-size: 18px;
+            font-size: 14px;
+
+            @media screen and (min-width: $breakpoint-l) {
+                font-size: 18px;
+            }
         }
     }
 
@@ -31,8 +47,12 @@ nav {
         bottom: 0px;
         overflow: auto;
         position: absolute;
-        top: $menu-header-height;
+        top: $menu-header-height-m;
         padding: 12px 24px 24px 24px;
+        
+        @media screen and (min-width: $breakpoint-l) {
+            top: $menu-header-height-l;
+        }
 
         li {
             margin-bottom: 8px;
@@ -42,13 +62,19 @@ nav {
             color: #FFF;
             display: block;
             cursor: pointer;
-            line-height: 24px;
+            font-size: 14px;
+            line-height: 20px;
             position: relative;
             border-radius: 4px;
             text-decoration: none;
             padding: 8px 12px 8px 48px;
             background-color: transparent;
             transition: background-color 200ms ease-out;
+            
+            @media screen and (min-width: $breakpoint-l) {
+                font-size: 18px;
+                line-height: 24px;
+            }
 
             &.active {
                 background-color: $color-menu-active;
@@ -62,9 +88,13 @@ nav {
                 top: 8px;
                 left: 8px;
                 color: #000;
-                font-size: 18px;
+                font-size: 16px;
                 position: absolute;
                 font-weight: bold;
+
+                @media screen and (min-width: $breakpoint-l) {
+                    font-size: 18px;
+                }
             }
         }
     }

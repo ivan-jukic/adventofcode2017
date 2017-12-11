@@ -1,5 +1,8 @@
 /// ...
 
+$breakpoint-m: 1200px;
+$breakpoint-l: 1600px;
+
 /// COLORS
 
 $color-background: #121E29;
@@ -20,5 +23,7 @@ $color-shadow: #141414; //#07243e;
 
 /// MENU
 
-$menu-header-height: 128px;
-$menu-width: 400px;
+$menu-header-height-m: 96px;
+$menu-header-height-l: 128px;
+$menu-width-m: 300px;
+$menu-width-l: 400px;
