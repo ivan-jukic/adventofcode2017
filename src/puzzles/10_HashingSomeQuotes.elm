@@ -4,13 +4,19 @@ import Components.View exposing (puzzleView, partData)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Array exposing (Array)
+import Task exposing (perform, succeed)
+import Char
+import Bitwise
+import Hex
 
 
 {-|
 -}
 type Msg
     = NoOp
-    | NextStep
+    | CalcPartOne
+    | CalcPartTwo
+    | PartTwoRounds
 
 
 {-|
@@ -20,20 +26,27 @@ type alias Model =
     , numbers : Array Int
     , position : Int
     , skipSize : Int
+    , roundCount : Int
     , partOne : Maybe Int
+    , partTwo : Maybe String
+    }
+
+
+init : Model
+init =
+    { lengths = []
+    , numbers = numberList
+    , position = 0
+    , skipSize = 0
+    , roundCount = 0
+    , partOne = Nothing
+    , partTwo = Nothing
     }
 
 
 initialModel : ( Model, Cmd Msg )
 initialModel =
-    ( { lengths = getInput
-      , numbers = numberList
-      , position = 0
-      , skipSize = 0
-      , partOne = Nothing
-      }
-    , Cmd.none
-    )
+    ( init, Cmd.none )
 
 
 {-|
@@ -44,25 +57,64 @@ update msg model =
         NoOp ->
             ( model, Cmd.none )
 
-        NextStep ->
+        CalcPartOne ->
             let
-                ( updated, finished ) =
-                    model |> nextStep
+                updated =
+                    { init
+                    | lengths = getInput
+                    , partTwo = model.partTwo
+                    } |> hashRound
 
                 solution =
-                    case List.length updated.lengths == 0 of
-                        True ->
-                            case model.numbers |> Array.toList of
-                                a::b::_ ->
-                                    Just <| a * b
+                    case updated.numbers |> Array.toList of
+                        a::b::_ ->
+                            Just <| a * b
 
-                                _ ->
-                                    Nothing
-
-                        False ->
+                        _ ->
                             Nothing
             in
             ( { updated | partOne = solution }, Cmd.none )
+
+        CalcPartTwo ->
+            ( { init | partOne = model.partOne }
+            , perform (\_ -> PartTwoRounds) (succeed ())
+            )
+
+        PartTwoRounds ->
+            case model.roundCount < 64 of
+                True ->
+                    ( hashRound
+                        { model
+                            | lengths = getInputAscii
+                            , roundCount = model.roundCount + 1
+                            }
+                    , perform (\_ -> PartTwoRounds) (succeed ())
+                    )
+
+                False ->
+                    let
+                        hash =
+                            List.range 0 15
+                                |> List.foldl
+                                    (\i out ->
+                                        let
+                                            sliceIdx =
+                                                16 * i
+
+                                            addToOut =
+                                                model.numbers
+                                                    |> Array.slice sliceIdx (sliceIdx + 16)
+                                                    |> Array.toList
+                                                    |> List.foldl (\n p -> Bitwise.xor p n) 0
+                                                    |> Hex.toString
+                                                    |> (\h -> (if String.length h == 1 then "0" else "") ++ h)
+                                        in
+                                        out ++ [ addToOut ]
+                                    )
+                                    []
+                                |> String.join ""
+                    in
+                    ( { model | partTwo = Just hash }, Cmd.none )
 
 
 {-|
@@ -74,17 +126,17 @@ view model =
             "10 Knot Hash"
             [ { partData
                 | label = "1) Result of the multiplication"
-                , desc = "...of the first two numbers in the list after hashing: "
-                , button = Just NextStep
-                , buttonLabel = Nothing
+                , desc = "...of the first two numbers in the list after one hashing round: "
+                , button = Just CalcPartOne
+                , buttonLabel = Just "Get result!"
                 , solution = model.partOne |> Maybe.andThen (\n -> Just <| toString n)
                 }
             , { partData
-                | label = "2) Second part"
-                , desc = "Solution for this part of the puzzle: "
-                , button = Nothing
-                , buttonLabel = Nothing
-                , solution = Nothing
+                | label = "2) Hash string"
+                , desc = "Full hash string for input: "
+                , button = Just CalcPartTwo
+                , buttonLabel = Just "Get hash!"
+                , solution = model.partTwo
                 }
             ]
         ]
@@ -92,8 +144,8 @@ view model =
 
 {-|
 -}
-nextStep : Model -> ( Model, Bool )
-nextStep model =
+hashRound : Model -> Model
+hashRound model =
     case List.head model.lengths of
         Just len ->
             let
@@ -122,21 +174,17 @@ nextStep model =
                             )
                         |> invertArray 0
                         |> Array.foldl (\(i, v) c -> Array.set i v c ) model.numbers
-
-
-                _ = Debug.log "len" updatedNumbers --(model.position, takeRight, takeStart, model.skipSize, model.numbers |> Array.toList)
             in
-            ( { model
-              | lengths = List.drop 1 model.lengths
-              , numbers = updatedNumbers
-              , skipSize = model.skipSize + 1
-              , position = (model.position + len + model.skipSize) % numCount
-              }
-            , False
-            )
+            hashRound
+                { model
+                | lengths = List.drop 1 model.lengths
+                , numbers = updatedNumbers
+                , skipSize = model.skipSize + 1
+                , position = (model.position + len + model.skipSize) % numCount
+                }
 
         Nothing ->
-            ( model, True )
+            model
 
 
 {-|
@@ -188,3 +236,17 @@ getInput =
     "183,0,31,146,254,240,223,150,2,206,161,1,255,232,199,88"
         |> String.split ","
         |> List.map (\n -> n |> String.trim |> String.toInt |> Result.withDefault 0)
+
+
+{-|
+-}
+getInputAscii : List Int
+getInputAscii =
+    (
+        --"AoC 2017"
+        "183,0,31,146,254,240,223,150,2,206,161,1,255,232,199,88"
+            |> String.toList
+            |> List.map (\c -> Char.toCode c)
+    )
+    ++ [ 17, 31, 73, 47, 23 ]
+  
