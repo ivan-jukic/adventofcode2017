@@ -152,7 +152,7 @@ hexDistance c =
 -}
 view : Model -> Html Msg
 view model =
-    div [ class "solution solution-x" ]
+    div [ class "solution solution-11" ]
         [ puzzleView
             "11 Hex Ed"
             [ { partData
