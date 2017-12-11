@@ -18,6 +18,7 @@ type Route
     | Day08
     | Day09
     | Day10
+    | Day11
 
 
 {-|
@@ -34,6 +35,7 @@ pathnames =
     , ( Day08, "08-dont-touch-your-registers.", "I Heard You Like Registers" )
     , ( Day09, "09-cleaning-up-garbage", "Stream Processing" )
     , ( Day10, "10-knot-hash", "Knot Hash" )
+    , ( Day11, "11-hex-pathfinding", "Hex Ed" )
     ]
 
 
