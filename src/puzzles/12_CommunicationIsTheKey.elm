@@ -124,8 +124,8 @@ view model =
                 , solution = model.partOne |> Maybe.andThen (toString >> Just)
                 }
             , { partData
-                | label = "2) Second part"
-                , desc = "Solution for this part of the puzzle: "
+                | label = "2) Total groups"
+                , desc = "Number of different groups: "
                 , button = Nothing
                 , buttonLabel = Nothing
                 , solution = model.partTwo |> Maybe.andThen (toString >> Just)
