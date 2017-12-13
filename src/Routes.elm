@@ -20,6 +20,7 @@ type Route
     | Day10
     | Day11
     | Day12
+    | Day13
 
 
 {-|
@@ -38,6 +39,7 @@ pathnames =
     , ( Day10, "10-knot-hash", "Knot Hash" )
     , ( Day11, "11-hex-pathfinding", "Hex Ed" )
     , ( Day12, "12-communication-is-key", "Digital Plumber" )
+    , ( Day13, "13-on-the-collision-course", "Packet Scanners" )
     ]
 
 
