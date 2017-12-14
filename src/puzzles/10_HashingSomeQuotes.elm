@@ -16,30 +16,19 @@ type Msg
     = NoOp
     | CalcPartOne
     | CalcPartTwo
-    | PartTwoRounds
 
 
 {-|
 -}
 type alias Model = 
-    { lengths : List Int
-    , numbers : Array Int
-    , position : Int
-    , skipSize : Int
-    , roundCount : Int
-    , partOne : Maybe Int
+    { partOne : Maybe Int
     , partTwo : Maybe String
     }
 
 
 init : Model
 init =
-    { lengths = []
-    , numbers = numberList
-    , position = 0
-    , skipSize = 0
-    , roundCount = 0
-    , partOne = Nothing
+    { partOne = Nothing
     , partTwo = Nothing
     }
 
@@ -60,61 +49,26 @@ update msg model =
         CalcPartOne ->
             let
                 updated =
-                    { init
-                    | lengths = getInput
-                    , partTwo = model.partTwo
-                    } |> hashRound
+                    hashRound
+                        { hashModel | lengths = getPartOneInput }
 
                 solution =
                     case updated.numbers |> Array.toList of
                         a::b::_ ->
                             Just <| a * b
-
                         _ ->
                             Nothing
             in
-            ( { updated | partOne = solution }, Cmd.none )
+            ( { model | partOne = solution }, Cmd.none )
 
         CalcPartTwo ->
-            ( { init | partOne = model.partOne }
-            , perform (\_ -> PartTwoRounds) (succeed ())
+            let
+                hash =
+                    knotHash getPartTwoInput
+            in
+            ( { init | partTwo = Just hash }
+            , Cmd.none
             )
-
-        PartTwoRounds ->
-            case model.roundCount < 64 of
-                True ->
-                    ( hashRound
-                        { model
-                            | lengths = getInputAscii
-                            , roundCount = model.roundCount + 1
-                            }
-                    , perform (\_ -> PartTwoRounds) (succeed ())
-                    )
-
-                False ->
-                    let
-                        hash =
-                            List.range 0 15
-                                |> List.foldl
-                                    (\i out ->
-                                        let
-                                            sliceIdx =
-                                                16 * i
-
-                                            addToOut =
-                                                model.numbers
-                                                    |> Array.slice sliceIdx (sliceIdx + 16)
-                                                    |> Array.toList
-                                                    |> List.foldl (\n p -> Bitwise.xor p n) 0
-                                                    |> Hex.toString
-                                                    |> (\h -> (if String.length h == 1 then "0" else "") ++ h)
-                                        in
-                                        out ++ [ addToOut ]
-                                    )
-                                    []
-                                |> String.join ""
-                    in
-                    ( { model | partTwo = Just hash }, Cmd.none )
 
 
 {-|
@@ -141,10 +95,73 @@ view model =
             ]
         ]
 
+{-|
+-}
+type alias HashModel =
+    { lengths : List Int
+    , numbers : Array Int
+    , position : Int
+    , skipSize : Int
+    }
+
+
+hashModel : HashModel
+hashModel =
+    { lengths = []
+    , numbers = List.range 0 255 |> Array.fromList
+    , position = 0
+    , skipSize = 0
+    }
 
 {-|
 -}
-hashRound : Model -> Model
+knotHash : String -> String
+knotHash strInput =
+    let
+        asciiInput =
+            ( strInput
+                |> String.toList
+                |> List.map (\c -> Char.toCode c)
+            )
+            ++ [ 17, 31, 73, 47, 23 ]
+    in
+    clculateHash 0 asciiInput hashModel
+
+
+{-|
+-}
+clculateHash : Int -> List Int -> HashModel -> String
+clculateHash roundCount asciiInput model =
+    case roundCount < 64 of
+        True ->
+            { model | lengths = asciiInput }
+                |> hashRound
+                |> clculateHash (roundCount + 1) asciiInput
+
+        False ->
+            List.range 0 15
+                |> List.foldl
+                    (\i out ->
+                        let
+                            sliceIdx =
+                                16 * i
+
+                            addToOut =
+                                model.numbers
+                                    |> Array.slice sliceIdx (sliceIdx + 16)
+                                    |> Array.toList
+                                    |> List.foldl (\n p -> Bitwise.xor p n) 0
+                                    |> Hex.toString
+                                    |> (\h -> (if String.length h == 1 then "0" else "") ++ h)
+                        in
+                        out ++ [ addToOut ]
+                    )
+                    []
+                |> String.join ""
+
+{-|
+-}
+hashRound : HashModel -> HashModel
 hashRound model =
     case List.head model.lengths of
         Just len ->
@@ -176,8 +193,7 @@ hashRound model =
                         |> Array.foldl (\(i, v) c -> Array.set i v c ) model.numbers
             in
             hashRound
-                { model
-                | lengths = List.drop 1 model.lengths
+                { lengths = List.drop 1 model.lengths
                 , numbers = updatedNumbers
                 , skipSize = model.skipSize + 1
                 , position = (model.position + len + model.skipSize) % numCount
@@ -222,16 +238,8 @@ invertArray step slice =
 
 {-|
 -}
-numberList : Array Int
-numberList =
-    --[ 0, 1, 2, 3, 4 ] |> Array.fromList
-    List.range 0 255 |> Array.fromList
-
-
-{-|
--}
-getInput : List Int
-getInput =
+getPartOneInput : List Int
+getPartOneInput =
     --"3,4,1,5"
     "183,0,31,146,254,240,223,150,2,206,161,1,255,232,199,88"
         |> String.split ","
@@ -240,13 +248,8 @@ getInput =
 
 {-|
 -}
-getInputAscii : List Int
-getInputAscii =
-    (
-        --"AoC 2017"
-        "183,0,31,146,254,240,223,150,2,206,161,1,255,232,199,88"
-            |> String.toList
-            |> List.map (\c -> Char.toCode c)
-    )
-    ++ [ 17, 31, 73, 47, 23 ]
+getPartTwoInput : String
+getPartTwoInput =
+    --"AoC 2017"
+    "183,0,31,146,254,240,223,150,2,206,161,1,255,232,199,88"
   

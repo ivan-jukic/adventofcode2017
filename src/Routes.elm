@@ -21,6 +21,7 @@ type Route
     | Day11
     | Day12
     | Day13
+    | Day14
 
 
 {-|
@@ -40,6 +41,7 @@ pathnames =
     , ( Day11, "11-hex-pathfinding", "Hex Ed" )
     , ( Day12, "12-communication-is-key", "Digital Plumber" )
     , ( Day13, "13-on-the-collision-course", "Packet Scanners" )
+    , ( Day14, "14-defragment-this-grid", "Disk Defragmentation" )
     ]
 
 

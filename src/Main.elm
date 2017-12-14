@@ -49,7 +49,7 @@ main =
     { init = init
     , view = view
     , update = update
-    , subscriptions = (\_ -> Sub.none)
+    , subscriptions = subscriptions
     }
 
 
@@ -57,7 +57,7 @@ main =
 -}
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.none
+    Sub.map ContentMsg (Content.subscriptions model.content)
 
 
 {-|
@@ -159,6 +159,9 @@ processRoute location =
 
                     Day13 ->
                         Content.initDay13
+
+                    Day14 ->
+                        Content.initDay14
 
                     _ ->
                         Content.noContent
