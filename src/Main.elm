@@ -121,6 +121,7 @@ processRoute location =
         subCmd =
             contentAction <|
                 case newRoute of
+                    {-- }
                     Day01 ->
                         Content.initDay01
                     
@@ -159,6 +160,7 @@ processRoute location =
 
                     Day13 ->
                         Content.initDay13
+                    --}
 
                     Day14 ->
                         Content.initDay14

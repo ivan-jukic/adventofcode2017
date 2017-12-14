@@ -6,6 +6,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Utils exposing (..)
 import Time exposing (Time)
+import Matrix exposing (Matrix)
 
 {-|
 -}
@@ -42,7 +43,7 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
     case model.busyOne of
         True ->
-            Time.every (Time.millisecond * 500) ContinueUsedBlockCalc
+            Time.every (Time.millisecond * 250) ContinueUsedBlockCalc
 
         False ->
             Sub.none
@@ -78,44 +79,51 @@ update msg model =
 
         GroupCount ->
             let
-                binaryBlocks =
-                    2
+                matrixSize = 128
+
+                binaryMatrix : Matrix Int
+                binaryMatrix =
+                    (matrixSize - 1)
                         |> List.range 0
-                        |> List.foldl (\i b -> b ++ [ getBinaryBlock i ]) []
-
-                (totalGroups, g) =
-                    binaryBlocks
                         |> List.foldl
-                            (\binary (t, g) ->
-                                let
-                                    (binaryGroups, _) =
-                                        binary
-                                            |> String.split ""
-                                            |> List.indexedMap (,)
-                                            |> List.foldl
-                                                (\(i, c) (g, newGroupStartIdx) ->
-                                                    case (newGroupStartIdx, c) of
-                                                        ( Nothing, "0" ) ->
-                                                            ( g, Nothing )
+                            (\i m ->
+                                getBinaryBlock i
+                                    |> String.split ""
+                                    |> List.indexedMap (,)
+                                    |> List.foldl
+                                        (\(j, v) mat ->
+                                            case v of
+                                                "1" ->
+                                                    mat |> Matrix.set (Matrix.loc i j) 1
 
-                                                        ( Nothing, "1" ) ->
-                                                            ( g, Just i )
-
-                                                        ( Just idx, "0" ) ->
-                                                            ( g ++ [ (idx, (i - 1)) ], Nothing)
-
-                                                        _ ->
-                                                            ( g, newGroupStartIdx )
-                                                )
-                                                ([], Nothing)
-
-                                    _ = Debug.log "" (binary, binaryGroups)
-                                in
-                                (t, g)
+                                                _ ->
+                                                    mat
+                                        )
+                                        m
                             )
-                            (0, [])
+                            (Matrix.square matrixSize (\_ -> 0))
+
+                ( total, updatedMatrix ) =
+                    (matrixSize - 1)
+                        |> List.range 0
+                        |> List.foldl
+                            (\i (tot, mat) ->
+                                (matrixSize - 1)
+                                    |> List.range 0
+                                    |> List.foldl
+                                        (\j (t, m) ->
+                                            case Matrix.get (i, j) m of
+                                                Just 1 ->
+                                                    ( t + 1, m |> clearGroup (i, j) )
+
+                                                _ ->
+                                                    ( t, m )
+                                        )
+                                        (tot, mat)
+                            )
+                            (0, binaryMatrix)
             in
-            ( { model | partTwo = totalGroups }, Cmd.none )
+            ( { model | partTwo = total }, Cmd.none )
 
 
 {-|
@@ -137,10 +145,40 @@ view model =
                 , desc = "Solution for this part of the puzzle: "
                 , button = Just GroupCount
                 , buttonLabel = Nothing
-                , solution = if model.partTwo > 0 then Just <| toString model.partOne else Nothing
+                , solution = if model.partTwo > 0 then Just <| toString model.partTwo else Nothing
                 }
             ]
         ]
+
+
+{-|
+-}
+clearGroup : (Int, Int) -> Matrix Int -> Matrix Int
+clearGroup (i, j) matrix =
+    case Matrix.get (i, j) matrix of
+        Just bit ->
+            case bit of
+                1 ->
+                    let
+                        updatedMatrix =
+                            matrix |> Matrix.set (i, j) 0
+
+                        checkLocations =
+                            List.concat
+                                [ if i > 0 then [ ( i - 1, j ) ] else []
+                                , if i < (Matrix.rowCount matrix - 1) then [ ( i + 1, j ) ] else []
+                                , if j > 0 then [ ( i, j - 1 ) ] else []
+                                , if j < (Matrix.colCount matrix - 1) then [ ( i, j + 1) ] else []
+                                ]
+                    in
+                    checkLocations
+                        |> List.foldl (\l m -> clearGroup l m) updatedMatrix
+
+                _ ->
+                    matrix
+
+        Nothing ->
+            matrix
 
 
 {-|
@@ -157,9 +195,6 @@ countUsedBlocks blockCount =
 -}
 getBinaryBlock : Int -> String
 getBinaryBlock blockCount =
-    let
-        _ = Debug.log "block" blockCount
-    in
     [ input, "-", toString blockCount ]
         |> String.join ""
         |> knotHash
@@ -214,5 +249,5 @@ toBinaryString c =
 -}
 input : String
 input =
-    "flqrgnkx"
-    --"stpzcrnm"
+    --"flqrgnkx"
+    "stpzcrnm"

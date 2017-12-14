@@ -3,6 +3,7 @@ module Content exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (class)
 import Components.Menu exposing (menuView)
+{-- }
 import Puzzles.Day01 as Day01
 import Puzzles.Day02 as Day02
 import Puzzles.Day03 as Day03
@@ -16,6 +17,7 @@ import Puzzles.Day10 as Day10
 import Puzzles.Day11 as Day11
 import Puzzles.Day12 as Day12
 import Puzzles.Day13 as Day13
+--}
 import Puzzles.Day14 as Day14
 import Routes
 import Navigation
@@ -26,6 +28,7 @@ import Task exposing (perform, succeed)
 -}
 type ContentModel
     = NoContent
+    {-- }
     | Content01 Day01.Model
     | Content02 Day02.Model
     | Content03 Day03.Model
@@ -39,6 +42,7 @@ type ContentModel
     | Content11 Day11.Model
     | Content12 Day12.Model
     | Content13 Day13.Model
+    --}
     | Content14 Day14.Model
 
 
@@ -54,6 +58,7 @@ type Msg
     = NoOp
     | ChangeUrl String
     | ChangeContent ContentModel (Cmd Msg)
+    {-- }
     | Day01Msg Day01.Msg
     | Day02Msg Day02.Msg
     | Day03Msg Day03.Msg
@@ -67,6 +72,7 @@ type Msg
     | Day11Msg Day11.Msg
     | Day12Msg Day12.Msg
     | Day13Msg Day13.Msg
+    --}
     | Day14Msg Day14.Msg
 
 
@@ -126,6 +132,9 @@ updateDay msg model =
 
         ( updated, subCmd ) =
             case ( model.content, msg ) of
+
+                {-- }
+
                 ( Content01 m, Day01Msg msg ) ->
                     Day01.update msg m |> noSubCmd Content01
 
@@ -165,6 +174,8 @@ updateDay msg model =
                 ( Content13 m, Day13Msg msg ) ->
                     Day13.update msg m |> withSubCmd Content13 Day13Msg
 
+                --}
+
                 ( Content14 m, Day14Msg msg ) ->
                     Day14.update msg m |> withSubCmd Content14 Day14Msg
 
@@ -183,6 +194,7 @@ view props model =
         [ ChangeUrl |> menuView props.route
         , div [ class "puzzle-content" ]
             [ case model.content of
+                {-- }
                 Content01 m ->
                     Day01.view m |> Html.map Day01Msg
 
@@ -221,6 +233,7 @@ view props model =
 
                 Content13 m ->
                     Day13.view m |> Html.map Day13Msg
+                --}
 
                 Content14 m ->
                     Day14.view m |> Html.map Day14Msg
@@ -236,6 +249,8 @@ noContent : Msg
 noContent =
     ChangeContent NoContent Cmd.none
 
+
+{-- }
 
 {-|
 -}
@@ -362,7 +377,7 @@ initDay13 =
             Day13.initialModel
     in
     ChangeContent (Content13 model) (Cmd.map Day13Msg subCmd)
-
+--}
 
 {-|
 -}
