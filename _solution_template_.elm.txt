@@ -3,6 +3,7 @@ module Puzzles.DayXX exposing (..)
 import Components.View exposing (puzzleView, partData)
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Utils exposing (..)
 
 
 {-|
