@@ -165,6 +165,12 @@ processRoute location =
                     Day14 ->
                         Content.initDay14
 
+                    Day15 ->
+                        Content.initDay15
+
+                    Day16 ->
+                        Content.initDay16
+
                     _ ->
                         Content.noContent
     in

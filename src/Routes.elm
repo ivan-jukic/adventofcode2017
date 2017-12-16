@@ -22,6 +22,8 @@ type Route
     | Day12
     | Day13
     | Day14
+    | Day15
+    | Day16
 
 
 {-|
@@ -42,6 +44,8 @@ pathnames =
     , ( Day12, "12-communication-is-key", "Digital Plumber" )
     , ( Day13, "13-on-the-collision-course", "Packet Scanners" )
     , ( Day14, "14-defragment-this-grid", "Disk Defragmentation" )
+    , ( Day15, "15-generate-some-numbers", "Dueling Generators" )
+    , ( Day16, "16-program-dance-off", "Permutation Promenade" )
     ]
 
 
