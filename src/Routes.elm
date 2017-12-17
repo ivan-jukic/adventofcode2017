@@ -24,6 +24,7 @@ type Route
     | Day14
     | Day15
     | Day16
+    | Day17
 
 
 {-|
@@ -46,6 +47,7 @@ pathnames =
     , ( Day14, "14-defragment-this-grid", "Disk Defragmentation" )
     , ( Day15, "15-generate-some-numbers", "Dueling Generators" )
     , ( Day16, "16-program-dance-off", "Permutation Promenade" )
+    , ( Day17, "17-step-into-the-vortex", "Spinlock" )
     ]
 
 

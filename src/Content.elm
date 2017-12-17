@@ -21,6 +21,7 @@ import Puzzles.Day13 as Day13
 import Puzzles.Day14 as Day14
 import Puzzles.Day15 as Day15
 import Puzzles.Day16 as Day16
+import Puzzles.Day17 as Day17
 import Routes
 import Navigation
 import Task exposing (perform, succeed)
@@ -48,6 +49,7 @@ type ContentModel
     | Content14 Day14.Model
     | Content15 Day15.Model
     | Content16 Day16.Model
+    | Content17 Day17.Model
 
 
 {-|
@@ -80,6 +82,7 @@ type Msg
     | Day14Msg Day14.Msg
     | Day15Msg Day15.Msg
     | Day16Msg Day16.Msg
+    | Day17Msg Day17.Msg
 
 
 {-|
@@ -191,6 +194,9 @@ updateDay msg model =
                 ( Content16 m, Day16Msg msg ) ->
                     Day16.update msg m |> withSubCmd Content16 Day16Msg
 
+                ( Content17 m, Day17Msg msg ) ->
+                    Day17.update msg m |> withSubCmd Content17 Day17Msg
+
                 _ ->
                     ( model.content, Cmd.none )
     in
@@ -255,6 +261,9 @@ view props model =
 
                 Content16 m ->
                     Day16.view m |> Html.map Day16Msg
+
+                Content17 m ->
+                    Day17.view m |> Html.map Day17Msg
 
                 _ ->
                     text ""
@@ -428,3 +437,14 @@ initDay16 =
             Day16.initialModel
     in
     ChangeContent (Content16 model) (Cmd.map Day16Msg subCmd)
+
+
+{-|
+-}
+initDay17 : Msg
+initDay17 =
+    let
+        (model, subCmd) =
+            Day17.initialModel
+    in
+    ChangeContent (Content17 model) (Cmd.map Day17Msg subCmd)
