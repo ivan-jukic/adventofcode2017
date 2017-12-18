@@ -14,8 +14,24 @@ const strInput =
 const instructions =
     strInput
         .split("\\n")
+        .map(ins => ins.trim())
         .map(ins => {
-            if (matches = ins.trim().match(/^set\s+([a-z]{1})\s+([0-9]+)/)) {
-                console.log(matches);
+            const buildFn = (r, m, fn) => {
+                const reg = m[1];
+                const val = parseInt(m[2], 10);
+                return fn(r, reg, val);
+            };
+            if (m = ins.match(/^set\s+([a-z]{1})\s+([0-9]+)/)) {
+                return r => buildFn(r, m, set);
+            }
+
+            if(m = ins.match(/^add\s+([a-z]{1})\s+([0-9]+)/)) {
+                return r => buildFn(r, m, add);
+            }
+
+            if(m = ins.match(/^mul\s+([a-z]{1})\s+([0-9]+)/)) {
+                const register = m[1];
+                const amount = parseInt(m[2], 10);
+                return r = add(r, register, amount);
             }
         });
