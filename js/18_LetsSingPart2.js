@@ -32,6 +32,7 @@ const sndFn = (s, reg) => {
 
     pub.publish(channel, JSON.stringify(data));
     state.sent++;
+    console.log("sent", state.sent);
     return puzzleInput.next(s);
 };
 
@@ -102,18 +103,18 @@ sub.on("message", (ch, msgStr) => {
                     }
                 pub.publish(channel, JSON.stringify(data));
                 if (!state.running) {
-                    console.log("sent data", state.sent);
-                    process.exit();
+                    //console.log("terminate");
+                    //process.exit();
                 }
 
             case 'receivingResponse':
                 if (msg.payload) {
-                    console.log("sent data", state.sent);
-                    process.exit();
+                    //console.log("terminate");
+                    //process.exit();
                 } else {
                     setTimeout(() => {
                         if(!state.running) askIfReceiving(state);
-                    }, 1000);
+                    }, 5000);
                 }
         }
     }
