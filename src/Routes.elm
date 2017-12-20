@@ -25,6 +25,8 @@ type Route
     | Day15
     | Day16
     | Day17
+    | Day18
+    | Day19
 
 
 {-|
@@ -48,6 +50,8 @@ pathnames =
     , ( Day15, "15-generate-some-numbers", "Dueling Generators" )
     , ( Day16, "16-program-dance-off", "Permutation Promenade" )
     , ( Day17, "17-step-into-the-vortex", "Spinlock" )
+    , ( Day18, "18-duet-in-parallel", "Duet" )
+    , ( Day19, "19-lost-in-pc", "A Series of Tubes" )
     ]
 
 
